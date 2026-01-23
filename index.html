@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Google tag (gtag.js) -->
+   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -16,17 +16,24 @@
 <body>
 
 <nav>
-<div class="logo">Unisell</div>
-<input placeholder="Search products" onclick="location.href='products.html'">
+  <div class="logo">Unisell</div>
 
-<div style="display:flex;align-items:center;gap:12px;">
-<div class="theme-toggle" onclick="toggleDark()">
-  <div class="toggle-circle">☀️</div>
-</div>
-<a href="index.html">Home</a>
-<a href="products.html">Shop</a>
-<a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-</div>
+  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()" 
+         style="max-width:220px;">
+
+  <div style="display:flex;align-items:center;gap:12px;">
+
+    <div class="theme-toggle" onclick="toggleDark()">
+      <div class="toggle-circle">☀️</div>
+    </div>
+
+    <a href="index.html">Home</a>
+    <a href="products.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
+
+  </div>
 </nav>
 
 <div class="container hero">
@@ -65,4 +72,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Contact Us - Unisell</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="logo">Unisell</div>
+
+  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()" 
+         style="max-width:220px;">
+
+  <div style="display:flex;align-items:center;gap:12px;">
+
+    <div class="theme-toggle" onclick="toggleDark()">
+      <div class="toggle-circle">☀️</div>
+    </div>
+
+    <a href="index.html">Home</a>
+    <a href="products.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
+
+  </div>
+</nav>
+
+<div class="container">
+<h1>Contact Us</h1>
+
+<p style="margin-top:15px;">
+Have questions or need help? Reach out to us anytime.
+</p>
+
+<h3 style="margin-top:20px;">Customer Support</h3>
+<p>Email: support@unisell.com</p>
+<p>Phone: +91 98765 43210</p>
+
+<h3 style="margin-top:20px;">Office Address</h3>
+<p>Unisell Pvt. Ltd.<br>
+Mumbai, Maharashtra, India</p>
+
+<h3 style="margin-top:25px;">Send Message</h3>
+
+<form style="max-width:400px;margin-top:10px;">
+<input placeholder="Your Name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;">
+<input placeholder="Email" style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;">
+<textarea placeholder="Message" style="width:100%;padding:10px;border-radius:8px;border:none;"></textarea>
+<br><br>
+<button class="btn" type="button">Submit</button>
+</form>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

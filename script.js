@@ -1,5 +1,26 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+/* ---------- THEME PERSIST ---------- */
+function applyTheme(){
+let mode = localStorage.getItem("theme");
+if(mode === "dark"){
+document.body.classList.add("dark");
+let icon=document.querySelector(".toggle-circle");
+if(icon) icon.innerHTML="🌙";
+}
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+
+let isDark = document.body.classList.contains("dark");
+localStorage.setItem("theme", isDark ? "dark" : "light");
+
+let icon=document.querySelector(".toggle-circle");
+if(icon) icon.innerHTML = isDark ? "🌙" : "☀️";
+}
+
+/* ---------- CART ---------- */
 function updateCount(){
 let c=document.getElementById("count");
 if(c) c.innerText=cart.length;
@@ -11,8 +32,10 @@ localStorage.setItem("cart",JSON.stringify(cart));
 updateCount();
 
 let card = btn.closest(".card");
+if(card){
 card.classList.add("added");
 setTimeout(()=>card.classList.remove("added"),700);
+}
 }
 
 function removeItem(i){
@@ -37,7 +60,7 @@ list.appendChild(li);
 total.innerText="Total: INR "+sum;
 }
 
-/* CATEGORY FILTER */
+/* ---------- CATEGORY FILTER ---------- */
 function filterCategory(){
 let hash=window.location.hash;
 
@@ -54,7 +77,7 @@ if(hash=="#fashion"){e.style.display="none";a.style.display="none";}
 if(hash=="#accessories"){e.style.display="none";f.style.display="none";}
 }
 
-/* SEARCH */
+/* ---------- SEARCH ---------- */
 function searchProducts(){
 let q=document.getElementById("searchBox").value.toLowerCase();
 let products=document.querySelectorAll(".product");
@@ -65,12 +88,26 @@ p.style.display = text.includes(q) ? "block" : "none";
 });
 }
 
-/* TOGGLE */
-function toggleDark(){
-document.body.classList.toggle("dark");
-let icon=document.querySelector(".toggle-circle");
-icon.innerHTML=document.body.classList.contains("dark")?"🌙":"☀️";
+/* ---------- CHECKOUT MODAL ---------- */
+function openCheckout(){
+document.getElementById("checkoutModal").style.display="flex";
 }
 
+function closeCheckout(e){
+if(e && e.target.id!=="checkoutModal") return;
+document.getElementById("checkoutModal").style.display="none";
+}
+
+function payNow(){
+alert("Payment Successful! Order Placed 🎉");
+cart=[];
+localStorage.removeItem("cart");
+updateCount();
+loadCart();
+document.getElementById("checkoutModal").style.display="none";
+}
+
+/* ---------- INIT ---------- */
+applyTheme();
 updateCount();
 filterCategory();

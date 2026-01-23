@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Google tag (gtag.js) -->
+   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -16,26 +16,59 @@
 <body>
 
 <nav>
-<div class="logo">Unisell</div>
+  <div class="logo">Unisell</div>
 
-<div style="display:flex;align-items:center;gap:12px;">
-<div class="theme-toggle" onclick="toggleDark()">
-  <div class="toggle-circle">☀️</div>
-</div>
-<a href="index.html">Home</a>
-<a href="products.html">Shop</a>
-<a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-</div>
+  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()">
+
+  <div style="display:flex;align-items:center;gap:12px;">
+
+    <div class="theme-toggle" onclick="toggleDark()">
+      <div class="toggle-circle">☀️</div>
+    </div>
+
+    <a href="index.html">Home</a>
+    <a href="products.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
+
+  </div>
 </nav>
 
 <div class="container">
-<h2>Your Cart</h2>
-<ul id="cart-items"></ul>
-<h3 id="total"></h3>
+  <h2>Your Cart</h2>
+
+  <ul id="cart-items"></ul>
+
+  <h3 id="total"></h3>
+
+  <button class="btn" onclick="openCheckout()">Checkout</button>
+</div>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div id="checkoutModal" class="modal" onclick="closeCheckout(event)">
+  <div class="modal-box">
+    <span class="close-btn" onclick="closeCheckout()">×</span>
+    <h2>Payment</h2>
+    <p>Choose Payment Method</p>
+
+    <select>
+      <option>UPI</option>
+      <option>Debit Card</option>
+      <option>Credit Card</option>
+      <option>Net Banking</option>
+    </select>
+
+    <input placeholder="Enter Payment ID">
+
+    <button class="btn" onclick="payNow()">Pay Now</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
-<script>loadCart();</script>
+<script>
+loadCart();
+</script>
+
 </body>
 </html>
-

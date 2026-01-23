@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shop - Unisell</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+<div class="logo">Unisell</div>
+<input id="searchBox" placeholder="Search products" onkeyup="searchProducts()">
+
+<div style="display:flex;align-items:center;gap:12px;">
+<div class="theme-toggle" onclick="toggleDark()">
+  <div class="toggle-circle">☀️</div>
+</div>
+<a href="index.html">Home</a>
+<a href="products.html">Shop</a>
+<a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
+</div>
+</nav>
+
+<div class="container">
+
+<div class="section" id="electronics-section">
+<h2 id="electronics">Electronics</h2>
+<div class="cards">
+
+<div class="card product">
+<img src="images/phone.jpg">
+<div class="info">
+<h4>Smartphone</h4>
+<p class="rating">★★★★★</p>
+<p class="price">INR 25000</p>
+<button class="btn" onclick="addToCart('Smartphone',25000,this)">Add to Cart</button>
+</div></div>
+
+<div class="card product">
+<img src="images/laptop.jpg">
+<div class="info">
+<h4>Laptop</h4>
+<p class="rating">★★★★☆</p>
+<p class="price">INR 65000</p>
+<button class="btn" onclick="addToCart('Laptop',65000,this)">Add to Cart</button>
+</div></div>
+
+</div></div>
+
+<div class="section" id="fashion-section">
+<h2 id="fashion">Fashion</h2>
+<div class="cards">
+
+<div class="card product">
+<img src="images/shoes.jpg">
+<div class="info">
+<h4>Sneakers</h4>
+<p class="rating">★★★★★</p>
+<p class="price">INR 3999</p>
+<button class="btn" onclick="addToCart('Sneakers',3999,this)">Add to Cart</button>
+</div></div>
+
+<div class="card product">
+<img src="images/jacket.jpg">
+<div class="info">
+<h4>Jacket</h4>
+<p class="rating">★★★★☆</p>
+<p class="price">INR 2999</p>
+<button class="btn" onclick="addToCart('Jacket',2999,this)">Add to Cart</button>
+</div></div>
+
+</div></div>
+
+<div class="section" id="accessories-section">
+<h2 id="accessories">Accessories</h2>
+<div class="cards">
+
+<div class="card product">
+<img src="images/headphones.jpg">
+<div class="info">
+<h4>Headphones</h4>
+<p class="rating">★★★★★</p>
+<p class="price">INR 1999</p>
+<button class="btn" onclick="addToCart('Headphones',1999,this)">Add to Cart</button>
+</div></div>
+
+<div class="card product">
+<img src="images/camera.jpg">
+<div class="info">
+<h4>Camera</h4>
+<p class="rating">★★★★☆</p>
+<p class="price">INR 18000</p>
+<button class="btn" onclick="addToCart('Camera',18000,this)">Add to Cart</button>
+</div></div>
+
+</div></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Unisell</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+<div class="logo">Unisell</div>
+<input placeholder="Search products" onclick="location.href='products.html'">
+
+<div style="display:flex;align-items:center;gap:12px;">
+<div class="theme-toggle" onclick="toggleDark()">
+  <div class="toggle-circle">☀️</div>
+</div>
+<a href="index.html">Home</a>
+<a href="products.html">Shop</a>
+<a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
+</div>
+</nav>
+
+<div class="container hero">
+<div>
+<h1>One Market.<br><span>Unlimited Selling.</span></h1>
+<p>Top brands. Best deals. Smooth shopping experience.</p>
+<button class="btn" onclick="location.href='products.html'">Start Shopping</button>
+</div>
+
+<img src="images/laptop.jpg">
+</div>
+
+<div class="container">
+<h2>Shop by Category</h2>
+
+<div class="categories">
+
+<div class="cat" onclick="location.href='products.html#electronics'">
+<img src="images/cat-electronics.jpg">
+<h3>Electronics</h3>
+</div>
+
+<div class="cat" onclick="location.href='products.html#fashion'">
+<img src="images/cat-fashion.jpg">
+<h3>Fashion</h3>
+</div>
+
+<div class="cat" onclick="location.href='products.html#accessories'">
+<img src="images/headphones.jpg">
+<h3>Accessories</h3>
+</div>
+
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

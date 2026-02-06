@@ -200,3 +200,9 @@ border:1px solid #ccc;
 .container{padding:30px;}
 nav{flex-direction:column;gap:10px;}
 }
+
+.modal-box input:focus,
+.modal-box select:focus{
+  outline:none;
+  border:2px solid #0066ff;
+}

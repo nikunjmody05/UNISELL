@@ -55,43 +55,41 @@
   </div>
 </nav>
 
-<div class="container">
+<!-- ===== CART SECTION ===== -->
+<div class="container" id="cartSection">
   <h2>Your Cart</h2>
   <ul id="cart-items"></ul>
   <h3 id="total"></h3>
-  <button class="btn" onclick="openCheckout()">Checkout</button>
+
+  <!-- UPDATED -->
+  <button class="btn" onclick="goToPayment()">Checkout</button>
 </div>
 
-<!-- ===== SECURE PAYMENT MODAL ===== -->
-<div id="checkoutModal" class="modal" onclick="closeCheckout(event)">
-  <div class="modal-box" style="width:420px;">
+<!-- ===== FULL PAGE PAYMENT SECTION ===== -->
+<div class="container" id="paymentPage" style="display:none;max-width:500px;">
 
-    <span class="close-btn" onclick="closeCheckout()">×</span>
+  <h2>Secure Payment</h2>
+  <p style="color:#666;">Choose payment method</p>
 
-    <h2>Secure Payment</h2>
-    <p style="color:#666;">Choose payment method</p>
+  <select id="payMethod" onchange="updatePlaceholder()">
+    <option value="upi">UPI</option>
+    <option value="card">Debit / Credit Card</option>
+  </select>
 
-    <select id="payMethod" onchange="updatePlaceholder()">
-      <option value="upi">UPI</option>
-      <option value="card">Debit / Credit Card</option>
-    </select>
+  <input id="payInput" placeholder="Enter UPI ID (name@bank)">
 
-    <input id="payInput" placeholder="Enter UPI ID (name@bank)">
+  <div class="pay-error" id="payError"></div>
+  <div class="loader" id="payLoader"></div>
 
-    <div class="pay-error" id="payError"></div>
-    <div class="loader" id="payLoader"></div>
+  <button class="btn" style="width:100%;margin-top:15px;" onclick="payNow()">
+    Pay Now
+  </button>
 
-    <!-- IMPORTANT: payNow() comes from script.js -->
-    <button class="btn" style="width:100%;margin-top:15px;" onclick="payNow()">
-      Pay Now
-    </button>
-
-    <div class="pay-success" id="paySuccess"></div>
-  </div>
+  <div class="pay-success" id="paySuccess"></div>
 </div>
 
 <!-- JS -->
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 <script>
   loadCart();
 

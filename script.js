@@ -88,15 +88,33 @@ function searchProducts(){
 
 /* ---------- FULL PAGE CHECKOUT ---------- */
 function goToPayment(){
+  // Hide cart, show payment page
   document.getElementById("cartSection").style.display = "none";
   document.getElementById("paymentPage").style.display = "block";
 
-  let total = cart.reduce((sum,i)=>sum+i.price,0);
+  /* ---------- ORDER SUMMARY UI ---------- */
+  let summary = document.getElementById("summaryItems");
+  let totalBox = document.getElementById("summaryTotal");
 
-  /* GA4 EVENT: begin_checkout */
+  summary.innerHTML = "";
+  let sum = 0;
+
+  cart.forEach(item=>{
+    sum += item.price;
+    summary.innerHTML += `
+      <p>
+        ${item.name}
+        <span style="float:right">₹${item.price}</span>
+      </p>
+    `;
+  });
+
+  totalBox.innerText = "Total: ₹" + sum;
+
+  /* ---------- GA4 EVENT: begin_checkout ---------- */
   gtag('event', 'begin_checkout', {
     currency: 'INR',
-    value: total,
+    value: sum,
     items: cart.map(item => ({
       item_name: item.name,
       price: item.price,
@@ -104,6 +122,7 @@ function goToPayment(){
     }))
   });
 }
+
 
 /* ---------- PAYMENT ---------- */
 function payNow(){
@@ -181,3 +200,4 @@ document.getElementById("payMethod")?.addEventListener("change", function(){
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();
+

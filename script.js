@@ -168,6 +168,16 @@ function payNow(){
   },3000);
 }
 
+document.getElementById("payMethod")?.addEventListener("change", function(){
+  let input = document.getElementById("payInput");
+  if(!input) return;
+
+  if(this.value === "upi") input.placeholder = "example@upi";
+  else if(this.value === "card") input.placeholder = "16-digit card number";
+  else input.placeholder = "Bank User ID";
+});
+
+
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();

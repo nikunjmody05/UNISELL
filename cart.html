@@ -4,7 +4,7 @@
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}
       t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vd2e67rdbu");
@@ -23,15 +23,56 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .pay-error{color:red;font-size:14px;margin-top:8px;}
-    .pay-success{color:green;margin-top:10px;text-align:center;}
+    .pay-error{color:#e53935;font-size:14px;margin-top:10px;}
+    .pay-success{color:#2e7d32;margin-top:15px;text-align:center;font-weight:600}
+
     .loader{
-      display:none;margin:15px auto;
+      display:none;margin:18px auto;
       border:4px solid #eee;border-top:4px solid #0066ff;
-      width:40px;height:40px;border-radius:50%;
+      width:38px;height:38px;border-radius:50%;
       animation:spin 1s linear infinite;
     }
     @keyframes spin{100%{transform:rotate(360deg)}}
+
+    /* ---- Gateway look ---- */
+    .gateway-box{
+      background:#fff;
+      border-radius:14px;
+      padding:28px;
+      box-shadow:0 18px 40px rgba(0,0,0,.15);
+    }
+
+    .gateway-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    .secure-badge{
+      font-size:13px;
+      background:#e8f5e9;
+      color:#2e7d32;
+      padding:6px 12px;
+      border-radius:20px;
+      font-weight:600;
+    }
+
+    .gateway-box select,
+    .gateway-box input{
+      width:100%;
+      padding:12px;
+      margin-top:12px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:15px;
+    }
+
+    .gateway-box .btn{
+      margin-top:18px;
+      font-size:16px;
+      padding:14px;
+    }
   </style>
 </head>
 
@@ -60,36 +101,40 @@
   <h2>Your Cart</h2>
   <ul id="cart-items"></ul>
   <h3 id="total"></h3>
-
-  <!-- UPDATED -->
   <button class="btn" onclick="goToPayment()">Checkout</button>
 </div>
 
-<!-- ===== FULL PAGE PAYMENT SECTION ===== -->
-<div class="container" id="paymentPage" style="display:none;max-width:500px;">
+<!-- ===== FULL PAGE PAYMENT ===== -->
+<div class="container" id="paymentPage" style="display:none;max-width:520px;">
 
-  <h2>Secure Payment</h2>
-  <p style="color:#666;">Choose payment method</p>
+  <div class="gateway-box">
 
-  <select id="payMethod" onchange="updatePlaceholder()">
-    <option value="upi">UPI</option>
-    <option value="card">Debit / Credit Card</option>
-  </select>
+    <div class="gateway-header">
+      <h2>Secure Payment</h2>
+      <div class="secure-badge">🔒 100% Secure</div>
+    </div>
 
-  <input id="payInput" placeholder="Enter UPI ID (name@bank)">
+    <p style="color:#666;margin-bottom:10px;">Choose a payment method</p>
 
-  <div class="pay-error" id="payError"></div>
-  <div class="loader" id="payLoader"></div>
+    <select id="payMethod" onchange="updatePlaceholder()">
+      <option value="upi">UPI</option>
+      <option value="card">Debit / Credit Card</option>
+    </select>
 
-  <button class="btn" style="width:100%;margin-top:15px;" onclick="payNow()">
-    Pay Now
-  </button>
+    <input id="payInput" placeholder="Enter UPI ID (name@bank)">
 
-  <div class="pay-success" id="paySuccess"></div>
+    <div class="pay-error" id="payError"></div>
+    <div class="loader" id="payLoader"></div>
+
+    <button class="btn" onclick="payNow()">Pay Now</button>
+
+    <div class="pay-success" id="paySuccess"></div>
+
+  </div>
 </div>
 
 <!-- JS -->
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 <script>
   loadCart();
 
@@ -97,8 +142,8 @@
     let method = document.getElementById("payMethod").value;
     document.getElementById("payInput").placeholder =
       method === "upi"
-        ? "Enter UPI ID (name@bank)"
-        : "Enter 16-digit Card Number";
+        ? "example@upi"
+        : "Enter 16-digit card number";
   }
 </script>
 

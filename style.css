@@ -366,3 +366,53 @@ nav{flex-direction:column;gap:10px;}
   color:#666;
   text-align:center;
 }
+
+/* ============================= */
+/* DARK MODE – CHECKOUT FIX */
+/* ============================= */
+
+body.dark .checkout-left,
+body.dark .checkout-right {
+  background: #121212;
+  color: #e0e0e0;
+  box-shadow: 0 18px 40px rgba(0,0,0,.6);
+}
+
+body.dark .checkout-left h2,
+body.dark .checkout-right h3,
+body.dark .payment-box label {
+  color: #ffffff;
+}
+
+body.dark .payment-box select,
+body.dark .payment-box input {
+  background: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid #333;
+}
+
+body.dark .payment-box select option {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+body.dark #summaryItems p,
+body.dark #summaryTotal {
+  color: #dddddd;
+}
+
+body.dark .secure-note {
+  color: #81c784;
+}
+
+body.dark .pay-error {
+  color: #ef5350;
+}
+
+body.dark .pay-success {
+  color: #66bb6a;
+}
+
+body.dark hr {
+  border-color: #333;
+}

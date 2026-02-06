@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <script type="text/javascript">
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vd2e67rdbu");
-</script>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  </script>
 
-  gtag('config', 'G-JVPS0RQZ8F');
-</script>
-<title>Cart - Unisell</title>
-<link rel="stylesheet" href="style.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JVPS0RQZ8F');
+  </script>
+
+  <title>Cart - Unisell</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .pay-error{color:red;font-size:14px;margin-top:8px;}
+    .pay-success{color:green;margin-top:10px;text-align:center;}
+    .loader{
+      display:none;margin:15px auto;
+      border:4px solid #eee;border-top:4px solid #0066ff;
+      width:40px;height:40px;border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+    @keyframes spin{100%{transform:rotate(360deg)}}
+  </style>
 </head>
+
 <body>
 
 <nav>
@@ -28,7 +43,6 @@
   <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()">
 
   <div style="display:flex;align-items:center;gap:12px;">
-
     <div class="theme-toggle" onclick="toggleDark()">
       <div class="toggle-circle">☀️</div>
     </div>
@@ -38,45 +52,110 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-
   </div>
 </nav>
 
 <div class="container">
   <h2>Your Cart</h2>
-
   <ul id="cart-items"></ul>
-
   <h3 id="total"></h3>
-
   <button class="btn" onclick="openCheckout()">Checkout</button>
 </div>
 
-<!-- ===== CHECKOUT MODAL ===== -->
+<!-- ===== SECURE PAYMENT MODAL ===== -->
 <div id="checkoutModal" class="modal" onclick="closeCheckout(event)">
-  <div class="modal-box">
-    <span class="close-btn" onclick="closeCheckout()">×</span>
-    <h2>Payment</h2>
-    <p>Choose Payment Method</p>
+  <div class="modal-box" style="width:420px;">
 
-    <select>
-      <option>UPI</option>
-      <option>Debit Card</option>
-      <option>Credit Card</option>
-      <option>Net Banking</option>
+    <span class="close-btn" onclick="closeCheckout()">×</span>
+
+    <h2>Secure Payment</h2>
+    <p style="color:#666;">Choose payment method</p>
+
+    <select id="payMethod" onchange="updatePlaceholder()">
+      <option value="upi">UPI</option>
+      <option value="card">Debit / Credit Card</option>
     </select>
 
-    <input placeholder="Enter Payment ID">
+    <input id="payInput" placeholder="Enter UPI ID">
 
-    <button class="btn" onclick="payNow()">Pay Now</button>
+    <div class="pay-error" id="payError"></div>
+    <div class="loader" id="payLoader"></div>
+
+    <button class="btn" style="width:100%;margin-top:15px;" onclick="payNow()">
+      Pay Now
+    </button>
+
+    <div class="pay-success" id="paySuccess"></div>
   </div>
 </div>
 
 <script src="script.js"></script>
+
 <script>
 loadCart();
+
+/* Change placeholder dynamically */
+function updatePlaceholder(){
+  let method=document.getElementById("payMethod").value;
+  document.getElementById("payInput").placeholder =
+    method==="upi" ? "Enter UPI ID (name@bank)" : "Enter 16-digit Card Number";
+}
+
+/* Override payNow with proper validation */
+function payNow(){
+
+  let method=document.getElementById("payMethod").value;
+  let input=document.getElementById("payInput").value.trim();
+  let error=document.getElementById("payError");
+  let loader=document.getElementById("payLoader");
+  let success=document.getElementById("paySuccess");
+
+  error.innerText="";
+  success.innerText="";
+
+  if(method==="upi"){
+    let upi=/^[\w.-]+@[\w.-]+$/;
+    if(!upi.test(input)){
+      error.innerText="Invalid UPI ID (example: name@bank)";
+      return;
+    }
+  }
+
+  if(method==="card"){
+    if(input.length!==16 || isNaN(input)){
+      error.innerText="Invalid card number (16 digits required)";
+      return;
+    }
+  }
+
+  loader.style.display="block";
+
+  setTimeout(()=>{
+    loader.style.display="none";
+
+    let total = cart.reduce((s,i)=>s+i.price,0);
+
+    gtag('event','purchase',{
+      transaction_id:'TXN_'+Date.now(),
+      currency:'INR',
+      value:total,
+      payment_type:method
+    });
+
+    success.innerText="Payment Successful ✔ Order Confirmed";
+
+    cart=[];
+    localStorage.removeItem("cart");
+    updateCount();
+    loadCart();
+
+    setTimeout(()=>{
+      document.getElementById("checkoutModal").style.display="none";
+    },2000);
+
+  },3000);
+}
 </script>
 
 </body>
 </html>
-

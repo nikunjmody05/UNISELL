@@ -130,14 +130,45 @@
     <h2>Secure Payment</h2>
 
     <div class="payment-box">
+
+      <!-- PAYMENT METHOD -->
       <label>Payment Method</label>
-      <select id="payMethod">
+      <select id="payMethod" onchange="switchPaymentUI()">
         <option value="upi">UPI</option>
         <option value="card">Debit / Credit Card</option>
       </select>
 
-      <label>Payment Details</label>
-      <input id="payInput" placeholder="example@upi" />
+      <!-- ===== UPI PAYMENT ===== -->
+      <div id="upiBox">
+        <label>UPI ID / Mobile Number</label>
+        <input id="upiInput" placeholder="example@upi or 9XXXXXXXXX" />
+        <small class="secure-note">You will be redirected to Google Pay</small>
+      </div>
+
+      <!-- ===== CARD PAYMENT ===== -->
+      <div id="cardBox" style="display:none">
+
+        <label>Card Number</label>
+        <input id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" />
+
+        <div style="display:flex;gap:10px">
+          <div style="flex:1">
+            <label>Expiry</label>
+            <input id="cardExpiry" placeholder="MM/YY" maxlength="5" />
+          </div>
+
+          <div style="flex:1;position:relative">
+            <label>CVV</label>
+            <input id="cardCVV" type="password" placeholder="CVV" maxlength="3" />
+            <span onclick="toggleCVV()"
+              style="position:absolute;right:12px;top:42px;cursor:pointer">👁️</span>
+          </div>
+        </div>
+
+        <label>Cardholder Name</label>
+        <input id="cardName" placeholder="Name on card" />
+
+      </div>
 
       <div class="pay-error" id="payError"></div>
       <div class="loader" id="payLoader"></div>
@@ -159,14 +190,9 @@
 
 </div>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
 <script>
   loadCart();
-
-  document.getElementById("payMethod").addEventListener("change",function(){
-    document.getElementById("payInput").placeholder =
-      this.value==="upi" ? "example@upi" : "16-digit card number";
-  });
 </script>
 
 </body>

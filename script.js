@@ -129,35 +129,74 @@ function closeCheckout(e){
 }
 
 function payNow(){
-  let total = cart.reduce((sum,i)=>sum+i.price,0);
 
-  /* GA4 EVENT: add_payment_info */
-  gtag('event', 'add_payment_info', {
-    payment_type: 'UPI'
-  });
+  let method = document.getElementById("payMethod").value;
+  let input = document.getElementById("payInput").value.trim();
+  let error = document.getElementById("payError");
+  let loader = document.getElementById("payLoader");
+  let success = document.getElementById("paySuccess");
 
-  /* GA4 EVENT: purchase */
-  gtag('event', 'purchase', {
-    transaction_id: 'TXN_' + Date.now(),
-    currency: 'INR',
-    value: total,
-    items: cart.map(item => ({
-      item_name: item.name,
-      price: item.price,
-      quantity: 1
-    }))
-  });
+  error.innerText = "";
+  success.innerText = "";
 
-  alert("Payment Successful! Order Placed 🎉");
+  /* ---------- VALIDATION ---------- */
+  if(method === "upi"){
+    let upiRegex = /^[\w.-]+@[\w.-]+$/;
+    if(!upiRegex.test(input)){
+      error.innerText = "Invalid UPI ID (example: name@bank)";
+      return;
+    }
+  }
 
-  cart=[];
-  localStorage.removeItem("cart");
-  updateCount();
-  loadCart();
-  document.getElementById("checkoutModal").style.display="none";
+  if(method === "card"){
+    if(input.length !== 16 || isNaN(input)){
+      error.innerText = "Invalid card number (16 digits required)";
+      return;
+    }
+  }
+
+  /* ---------- PROCESSING ---------- */
+  loader.style.display = "block";
+
+  setTimeout(()=>{
+
+    loader.style.display = "none";
+
+    let total = cart.reduce((sum,i)=>sum+i.price,0);
+
+    /* GA4 EVENT: add_payment_info */
+    gtag('event', 'add_payment_info', {
+      payment_type: method
+    });
+
+    /* GA4 EVENT: purchase */
+    gtag('event', 'purchase', {
+      transaction_id: 'TXN_' + Date.now(),
+      currency: 'INR',
+      value: total,
+      items: cart.map(item => ({
+        item_name: item.name,
+        price: item.price,
+        quantity: 1
+      }))
+    });
+
+    success.innerText = "Payment Successful ✔ Order Confirmed";
+
+    cart = [];
+    localStorage.removeItem("cart");
+    updateCount();
+    loadCart();
+
+    setTimeout(()=>{
+      document.getElementById("checkoutModal").style.display = "none";
+    },2000);
+
+  },3000);
 }
 
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();
 filterCategory();
+

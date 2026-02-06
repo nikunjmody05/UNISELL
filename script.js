@@ -1,6 +1,6 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* ---------- THEME PERSIST ---------- */
+/* ---------- THEME ---------- */
 function applyTheme(){
   let mode = localStorage.getItem("theme");
   if(mode === "dark"){
@@ -12,7 +12,6 @@ function applyTheme(){
 
 function toggleDark(){
   document.body.classList.toggle("dark");
-
   let isDark = document.body.classList.contains("dark");
   localStorage.setItem("theme", isDark ? "dark" : "light");
 
@@ -31,15 +30,10 @@ function addToCart(name,price,btn){
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
 
-  /* GA4 EVENT: add_to_cart */
-  gtag('event', 'add_to_cart', {
-    currency: 'INR',
-    value: price,
-    items: [{
-      item_name: name,
-      price: price,
-      quantity: 1
-    }]
+  gtag('event','add_to_cart',{
+    currency:'INR',
+    value:price,
+    items:[{ item_name:name, price:price, quantity:1 }]
   });
 
   let card = btn.closest(".card");
@@ -66,122 +60,143 @@ function loadCart(){
 
   cart.forEach((item,i)=>{
     sum+=item.price;
-    let li=document.createElement("li");
-    li.innerHTML=`${item.name} - INR ${item.price}
-      <button class="remove" onclick="removeItem(${i})">Remove</button>`;
-    list.appendChild(li);
+    list.innerHTML+=`
+      <li>${item.name} - ₹${item.price}
+        <button class="remove" onclick="removeItem(${i})">Remove</button>
+      </li>`;
   });
 
-  total.innerText="Total: INR "+sum;
+  total.innerText="Total: ₹"+sum;
 }
 
 /* ---------- SEARCH ---------- */
 function searchProducts(){
   let q=document.getElementById("searchBox").value.toLowerCase();
-  let products=document.querySelectorAll(".product");
-
-  products.forEach(p=>{
-    let text=p.innerText.toLowerCase();
-    p.style.display = text.includes(q) ? "block" : "none";
+  document.querySelectorAll(".product").forEach(p=>{
+    p.style.display = p.innerText.toLowerCase().includes(q) ? "block":"none";
   });
 }
 
-/* ---------- FULL PAGE CHECKOUT ---------- */
+/* ---------- CHECKOUT ---------- */
 function goToPayment(){
+  document.getElementById("cartSection").style.display="none";
+  document.getElementById("paymentPage").style.display="flex";
 
-  // Hide cart, show payment page
-  document.getElementById("cartSection").style.display = "none";
-  document.getElementById("paymentPage").style.display = "block";
+  let summary=document.getElementById("summaryItems");
+  let totalBox=document.getElementById("summaryTotal");
 
-  /* ---------- ORDER SUMMARY UI ---------- */
-  let summary = document.getElementById("summaryItems");
-  let totalBox = document.getElementById("summaryTotal");
-
-  summary.innerHTML = "";
-  let sum = 0;
+  summary.innerHTML="";
+  let sum=0;
 
   cart.forEach(item=>{
-    sum += item.price;
-    summary.innerHTML += `
-      <p>
-        ${item.name}
+    sum+=item.price;
+    summary.innerHTML+=`
+      <p>${item.name}
         <span style="float:right">₹${item.price}</span>
-      </p>
-    `;
+      </p>`;
   });
 
-  totalBox.innerText = "Total: ₹" + sum;
+  totalBox.innerText="Total: ₹"+sum;
 
-  /* ---------- GA4 EVENT: begin_checkout ---------- */
-  gtag('event', 'begin_checkout', {
-    currency: 'INR',
-    value: sum,
-    items: cart.map(item => ({
-      item_name: item.name,
-      price: item.price,
-      quantity: 1
+  gtag('event','begin_checkout',{
+    currency:'INR',
+    value:sum,
+    items:cart.map(i=>({
+      item_name:i.name,
+      price:i.price,
+      quantity:1
     }))
   });
 }
 
+/* ---------- PAYMENT UI SWITCH ---------- */
+function switchPaymentUI(){
+  let method=document.getElementById("payMethod").value;
+  document.getElementById("upiBox").style.display =
+    method==="upi" ? "block":"none";
+  document.getElementById("cardBox").style.display =
+    method==="card" ? "block":"none";
+}
 
+/* ---------- CVV TOGGLE ---------- */
+function toggleCVV(){
+  let cvv=document.getElementById("cardCVV");
+  cvv.type = cvv.type==="password" ? "text":"password";
+}
+
+/* ---------- CARD FORMAT ---------- */
+document.getElementById("cardNumber")?.addEventListener("input",function(){
+  this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim();
+});
 
 /* ---------- PAYMENT ---------- */
 function payNow(){
 
-  let method = document.getElementById("payMethod").value;
-  let input = document.getElementById("payInput").value.trim();
-  let error = document.getElementById("payError");
-  let loader = document.getElementById("payLoader");
-  let success = document.getElementById("paySuccess");
+  let method=document.getElementById("payMethod").value;
+  let error=document.getElementById("payError");
+  let loader=document.getElementById("payLoader");
+  let success=document.getElementById("paySuccess");
 
-  error.innerText = "";
-  success.innerText = "";
+  error.innerText="";
+  success.innerText="";
 
-  /* VALIDATION */
-  if(method === "upi"){
-    let upiRegex = /^[\w.-]+@[\w.-]+$/;
-    if(!upiRegex.test(input)){
-      error.innerText = "Invalid UPI ID (example: name@bank)";
+  /* ---- UPI ---- */
+  if(method==="upi"){
+    let upi=document.getElementById("upiInput").value.trim();
+    let vpa=/^[\w.-]+@[\w.-]+$/;
+    let phone=/^[6-9]\d{9}$/;
+
+    if(!vpa.test(upi) && !phone.test(upi)){
+      error.innerText="Enter valid UPI ID or mobile number";
       return;
+    }
+    error.innerText="Redirecting to Google Pay...";
+  }
+
+  /* ---- CARD ---- */
+  if(method==="card"){
+    let card=document.getElementById("cardNumber").value.replace(/\s/g,'');
+    let exp=document.getElementById("cardExpiry").value;
+    let cvv=document.getElementById("cardCVV").value;
+    let name=document.getElementById("cardName").value.trim();
+
+    if(card.length!==16 || isNaN(card)){
+      error.innerText="Invalid card number"; return;
+    }
+    if(!/^\d{2}\/\d{2}$/.test(exp)){
+      error.innerText="Expiry must be MM/YY"; return;
+    }
+    if(cvv.length!==3){
+      error.innerText="Invalid CVV"; return;
+    }
+    if(name.length<3){
+      error.innerText="Enter cardholder name"; return;
     }
   }
 
-  if(method === "card"){
-    if(input.length !== 16 || isNaN(input)){
-      error.innerText = "Invalid card number (16 digits required)";
-      return;
-    }
-  }
-
-  loader.style.display = "block";
+  loader.style.display="block";
 
   setTimeout(()=>{
+    loader.style.display="none";
 
-    loader.style.display = "none";
+    let total=cart.reduce((s,i)=>s+i.price,0);
 
-    let total = cart.reduce((sum,i)=>sum+i.price,0);
+    gtag('event','add_payment_info',{ payment_type:method });
 
-    /* GA4 EVENT: add_payment_info */
-    gtag('event', 'add_payment_info', {
-      payment_type: method
-    });
-
-    /* GA4 EVENT: purchase */
-    gtag('event', 'purchase', {
-      transaction_id: 'TXN_' + Date.now(),
-      currency: 'INR',
-      value: total,
-      items: cart.map(item => ({
-        item_name: item.name,
-        price: item.price,
-        quantity: 1
+    gtag('event','purchase',{
+      transaction_id:'TXN_'+Date.now(),
+      currency:'INR',
+      value:total,
+      items:cart.map(i=>({
+        item_name:i.name,
+        price:i.price,
+        quantity:1
       }))
     });
 
-    success.innerText = "Payment Successful ✔ Order Confirmed";
+    success.innerText="Payment Successful ✔ Order Confirmed";
 
-    cart = [];
+    cart=[];
     localStorage.removeItem("cart");
     updateCount();
     loadCart();
@@ -189,18 +204,6 @@ function payNow(){
   },3000);
 }
 
-document.getElementById("payMethod")?.addEventListener("change", function(){
-  let input = document.getElementById("payInput");
-  if(!input) return;
-
-  if(this.value === "upi") input.placeholder = "example@upi";
-  else if(this.value === "card") input.placeholder = "16-digit card number";
-  else input.placeholder = "Bank User ID";
-});
-
-
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();
-
-

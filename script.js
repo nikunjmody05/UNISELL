@@ -88,6 +88,7 @@ function searchProducts(){
 
 /* ---------- FULL PAGE CHECKOUT ---------- */
 function goToPayment(){
+
   // Hide cart, show payment page
   document.getElementById("cartSection").style.display = "none";
   document.getElementById("paymentPage").style.display = "block";
@@ -122,6 +123,7 @@ function goToPayment(){
     }))
   });
 }
+
 
 
 /* ---------- PAYMENT ---------- */
@@ -200,4 +202,5 @@ document.getElementById("payMethod")?.addEventListener("change", function(){
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();
+
 

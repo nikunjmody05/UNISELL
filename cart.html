@@ -22,56 +22,74 @@
   <title>Cart - Unisell</title>
   <link rel="stylesheet" href="style.css">
 
+  <!-- Checkout styles -->
   <style>
-    .pay-error{color:#e53935;font-size:14px;margin-top:10px;}
-    .pay-success{color:#2e7d32;margin-top:15px;text-align:center;font-weight:600}
-
-    .loader{
-      display:none;margin:18px auto;
-      border:4px solid #eee;border-top:4px solid #0066ff;
-      width:38px;height:38px;border-radius:50%;
-      animation:spin 1s linear infinite;
-    }
-    @keyframes spin{100%{transform:rotate(360deg)}}
-
-    /* ---- Gateway look ---- */
-    .gateway-box{
-      background:#fff;
-      border-radius:14px;
-      padding:28px;
-      box-shadow:0 18px 40px rgba(0,0,0,.15);
-    }
-
-    .gateway-header{
+    .checkout-wrapper{
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:20px;
+      gap:40px;
+      max-width:1100px;
+      margin:40px auto;
     }
 
-    .secure-badge{
-      font-size:13px;
-      background:#e8f5e9;
-      color:#2e7d32;
-      padding:6px 12px;
-      border-radius:20px;
+    .checkout-left,.checkout-right{
+      background:#fff;
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 16px 40px rgba(0,0,0,.15);
+    }
+
+    .checkout-left{flex:2}
+    .checkout-right{flex:1}
+
+    .payment-box label{
+      display:block;
+      margin-top:18px;
       font-weight:600;
+      font-size:14px;
     }
 
-    .gateway-box select,
-    .gateway-box input{
+    .payment-box select,
+    .payment-box input{
       width:100%;
       padding:12px;
-      margin-top:12px;
+      margin-top:8px;
       border-radius:8px;
       border:1px solid #ccc;
       font-size:15px;
     }
 
-    .gateway-box .btn{
-      margin-top:18px;
-      font-size:16px;
+    .pay-btn{
+      margin-top:20px;
+      width:100%;
       padding:14px;
+      font-size:16px;
+      border:none;
+      border-radius:10px;
+      background:#0b5cff;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .secure-note{
+      margin-top:15px;
+      font-size:13px;
+      color:#2e7d32;
+    }
+
+    .pay-error{color:#e53935;margin-top:10px}
+    .pay-success{color:#2e7d32;margin-top:12px;font-weight:600}
+
+    .loader{
+      display:none;margin:15px auto;
+      border:4px solid #eee;border-top:4px solid #0b5cff;
+      width:36px;height:36px;border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+    @keyframes spin{100%{transform:rotate(360deg)}}
+
+    #summaryItems p{
+      font-size:14px;
+      margin:8px 0;
     }
   </style>
 </head>
@@ -104,47 +122,51 @@
   <button class="btn" onclick="goToPayment()">Checkout</button>
 </div>
 
-<!-- ===== FULL PAGE PAYMENT ===== -->
-<div class="container" id="paymentPage" style="display:none;max-width:520px;">
+<!-- ===== FULL PAGE CHECKOUT ===== -->
+<div class="checkout-wrapper" id="paymentPage" style="display:none;">
 
-  <div class="gateway-box">
+  <!-- LEFT: PAYMENT -->
+  <div class="checkout-left">
+    <h2>Secure Payment</h2>
 
-    <div class="gateway-header">
-      <h2>Secure Payment</h2>
-      <div class="secure-badge">🔒 100% Secure</div>
+    <div class="payment-box">
+      <label>Payment Method</label>
+      <select id="payMethod">
+        <option value="upi">UPI</option>
+        <option value="card">Debit / Credit Card</option>
+      </select>
+
+      <label>Payment Details</label>
+      <input id="payInput" placeholder="example@upi" />
+
+      <div class="pay-error" id="payError"></div>
+      <div class="loader" id="payLoader"></div>
+
+      <button class="pay-btn" onclick="payNow()">Pay Securely</button>
+      <div class="pay-success" id="paySuccess"></div>
+
+      <p class="secure-note">🔒 Payments are encrypted & secure</p>
     </div>
-
-    <p style="color:#666;margin-bottom:10px;">Choose a payment method</p>
-
-    <select id="payMethod" onchange="updatePlaceholder()">
-      <option value="upi">UPI</option>
-      <option value="card">Debit / Credit Card</option>
-    </select>
-
-    <input id="payInput" placeholder="Enter UPI ID (name@bank)">
-
-    <div class="pay-error" id="payError"></div>
-    <div class="loader" id="payLoader"></div>
-
-    <button class="btn" onclick="payNow()">Pay Now</button>
-
-    <div class="pay-success" id="paySuccess"></div>
-
   </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="checkout-right">
+    <h3>Order Summary</h3>
+    <div id="summaryItems"></div>
+    <hr>
+    <h3 id="summaryTotal"></h3>
+  </div>
+
 </div>
 
-<!-- JS -->
 <script src="script.js?v=6"></script>
 <script>
   loadCart();
 
-  function updatePlaceholder(){
-    let method = document.getElementById("payMethod").value;
+  document.getElementById("payMethod").addEventListener("change",function(){
     document.getElementById("payInput").placeholder =
-      method === "upi"
-        ? "example@upi"
-        : "Enter 16-digit card number";
-  }
+      this.value==="upi" ? "example@upi" : "16-digit card number";
+  });
 </script>
 
 </body>

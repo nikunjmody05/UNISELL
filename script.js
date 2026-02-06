@@ -75,25 +75,6 @@ function loadCart(){
   total.innerText="Total: INR "+sum;
 }
 
-/* ---------- CATEGORY FILTER ---------- */
-function filterCategory(){
-  let hash=window.location.hash;
-
-  let e=document.getElementById("electronics-section");
-  let f=document.getElementById("fashion-section");
-  let a=document.getElementById("accessories-section");
-
-  if(!e) return;
-
-  e.style.display="block";
-  f.style.display="block";
-  a.style.display="block";
-
-  if(hash=="#electronics"){f.style.display="none";a.style.display="none";}
-  if(hash=="#fashion"){e.style.display="none";a.style.display="none";}
-  if(hash=="#accessories"){e.style.display="none";f.style.display="none";}
-}
-
 /* ---------- SEARCH ---------- */
 function searchProducts(){
   let q=document.getElementById("searchBox").value.toLowerCase();
@@ -105,9 +86,10 @@ function searchProducts(){
   });
 }
 
-/* ---------- CHECKOUT MODAL ---------- */
-function openCheckout(){
-  document.getElementById("checkoutModal").style.display="flex";
+/* ---------- FULL PAGE CHECKOUT ---------- */
+function goToPayment(){
+  document.getElementById("cartSection").style.display = "none";
+  document.getElementById("paymentPage").style.display = "block";
 
   let total = cart.reduce((sum,i)=>sum+i.price,0);
 
@@ -123,11 +105,7 @@ function openCheckout(){
   });
 }
 
-function closeCheckout(e){
-  if(e && e.target.id!=="checkoutModal") return;
-  document.getElementById("checkoutModal").style.display="none";
-}
-
+/* ---------- PAYMENT ---------- */
 function payNow(){
 
   let method = document.getElementById("payMethod").value;
@@ -139,7 +117,7 @@ function payNow(){
   error.innerText = "";
   success.innerText = "";
 
-  /* ---------- VALIDATION ---------- */
+  /* VALIDATION */
   if(method === "upi"){
     let upiRegex = /^[\w.-]+@[\w.-]+$/;
     if(!upiRegex.test(input)){
@@ -155,7 +133,6 @@ function payNow(){
     }
   }
 
-  /* ---------- PROCESSING ---------- */
   loader.style.display = "block";
 
   setTimeout(()=>{
@@ -188,15 +165,9 @@ function payNow(){
     updateCount();
     loadCart();
 
-    setTimeout(()=>{
-      document.getElementById("checkoutModal").style.display = "none";
-    },2000);
-
   },3000);
 }
 
 /* ---------- INIT ---------- */
 applyTheme();
 updateCount();
-filterCategory();
-

@@ -76,11 +76,12 @@
       <option value="card">Debit / Credit Card</option>
     </select>
 
-    <input id="payInput" placeholder="Enter UPI ID">
+    <input id="payInput" placeholder="Enter UPI ID (name@bank)">
 
     <div class="pay-error" id="payError"></div>
     <div class="loader" id="payLoader"></div>
 
+    <!-- IMPORTANT: payNow() comes from script.js -->
     <button class="btn" style="width:100%;margin-top:15px;" onclick="payNow()">
       Pay Now
     </button>
@@ -89,72 +90,18 @@
   </div>
 </div>
 
-<script src="script.js"></script>
-
+<!-- JS -->
+<script src="script.js?v=4"></script>
 <script>
-loadCart();
+  loadCart();
 
-/* Change placeholder dynamically */
-function updatePlaceholder(){
-  let method=document.getElementById("payMethod").value;
-  document.getElementById("payInput").placeholder =
-    method==="upi" ? "Enter UPI ID (name@bank)" : "Enter 16-digit Card Number";
-}
-
-/* Override payNow with proper validation */
-function payNow(){
-
-  let method=document.getElementById("payMethod").value;
-  let input=document.getElementById("payInput").value.trim();
-  let error=document.getElementById("payError");
-  let loader=document.getElementById("payLoader");
-  let success=document.getElementById("paySuccess");
-
-  error.innerText="";
-  success.innerText="";
-
-  if(method==="upi"){
-    let upi=/^[\w.-]+@[\w.-]+$/;
-    if(!upi.test(input)){
-      error.innerText="Invalid UPI ID (example: name@bank)";
-      return;
-    }
+  function updatePlaceholder(){
+    let method = document.getElementById("payMethod").value;
+    document.getElementById("payInput").placeholder =
+      method === "upi"
+        ? "Enter UPI ID (name@bank)"
+        : "Enter 16-digit Card Number";
   }
-
-  if(method==="card"){
-    if(input.length!==16 || isNaN(input)){
-      error.innerText="Invalid card number (16 digits required)";
-      return;
-    }
-  }
-
-  loader.style.display="block";
-
-  setTimeout(()=>{
-    loader.style.display="none";
-
-    let total = cart.reduce((s,i)=>s+i.price,0);
-
-    gtag('event','purchase',{
-      transaction_id:'TXN_'+Date.now(),
-      currency:'INR',
-      value:total,
-      payment_type:method
-    });
-
-    success.innerText="Payment Successful ✔ Order Confirmed";
-
-    cart=[];
-    localStorage.removeItem("cart");
-    updateCount();
-    loadCart();
-
-    setTimeout(()=>{
-      document.getElementById("checkoutModal").style.display="none";
-    },2000);
-
-  },3000);
-}
 </script>
 
 </body>

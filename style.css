@@ -1,73 +1,532 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+/* ==========================================================
+   RESET
+   ========================================================== */
+
+*,
+*::before,
+*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
 
 body{
-background:linear-gradient(120deg,#74ebd5,#9face6);
-min-height:100vh;
-color:#0b1d2a;
-transition:.4s;
-animation:fadePage .6s ease;
+    font-family:"Inter",sans-serif;
+    background:#F8FAFC;
+    color:#0F172A;
+    line-height:1.6;
+    overflow-x:hidden;
+    transition:.35s ease;
 }
 
 body.dark{
-background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
-color:white;
+    background:#020617;
+    color:#F8FAFC;
 }
 
-@keyframes fadePage{from{opacity:0}to{opacity:1}}
+img{
+    width:100%;
+    display:block;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+input,
+button,
+textarea,
+select{
+    outline:none;
+}
+
+/* ==========================================================
+   VARIABLES
+   ========================================================== */
+
+:root{
+
+    --primary:#2563EB;
+    --primary-dark:#1D4ED8;
+
+    --secondary:#3B82F6;
+
+    --success:#16A34A;
+    --danger:#DC2626;
+
+    --text:#0F172A;
+    --text-light:#64748B;
+
+    --bg:#F8FAFC;
+
+    --white:#FFFFFF;
+
+    --border:#E2E8F0;
+
+    --shadow-sm:
+    0 6px 20px rgba(15,23,42,.05);
+
+    --shadow:
+    0 12px 35px rgba(15,23,42,.08);
+
+    --shadow-lg:
+    0 25px 60px rgba(15,23,42,.15);
+
+    --radius:18px;
+
+}
+
+/* ==========================================================
+   COMMON
+   ========================================================== */
+
+.container{
+    width:min(1200px,92%);
+    margin:auto;
+}
+
+.section{
+    padding:90px 0;
+}
+
+.section-title{
+
+    font-size:42px;
+
+    font-weight:800;
+
+    text-align:center;
+
+    margin-bottom:18px;
+}
+
+.section-subtitle{
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    max-width:650px;
+
+    margin:0 auto 60px;
+}
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 16px;
+
+    background:#DBEAFE;
+
+    color:var(--primary);
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+body.dark .badge{
+
+    background:#172554;
+
+    color:#BFDBFE;
+}
+
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
 
 nav{
-display:flex;justify-content:space-between;align-items:center;
-padding:15px 50px;
-background:rgba(255,255,255,0.25);
-backdrop-filter:blur(12px);
-position:sticky;top:0;z-index:10;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    backdrop-filter:blur(20px);
+
+    background:rgba(255,255,255,.82);
+
+    border-bottom:1px solid rgba(226,232,240,.8);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 6%;
+}
+
+body.dark nav{
+
+    background:rgba(2,6,23,.82);
+
+    border-color:#1E293B;
 }
 
 .logo{
-font-size:30px;
-font-weight:800;
-color:#0066ff;
-letter-spacing:1px;
+
+    font-size:30px;
+
+    font-weight:900;
+
+    letter-spacing:-1px;
+
+    color:var(--primary);
 }
 
 nav input{
-padding:8px 15px;border-radius:20px;border:none;width:220px;
-outline:none;
+
+    width:270px;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+    transition:.3s;
 }
 
-nav a{color:inherit;text-decoration:none;margin:0 8px;font-weight:500;}
+nav input:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+body.dark nav input{
+
+    background:#0F172A;
+
+    color:#fff;
+
+    border-color:#334155;
+}
+
+nav a{
+
+    position:relative;
+
+    font-weight:600;
+
+    color:var(--text-light);
+
+    transition:.3s;
+}
+
+body.dark nav a{
+
+    color:#CBD5E1;
+}
+
+nav a:hover{
+
+    color:var(--primary);
+}
+
+nav a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-6px;
+
+    width:0;
+
+    height:2px;
+
+    background:var(--primary);
+
+    transition:.3s;
+}
+
+nav a:hover::after{
+
+    width:100%;
+}
 
 .cart-count{
-background:#0066ff;color:white;padding:3px 8px;border-radius:50%;
-font-size:12px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:22px;
+
+    height:22px;
+
+    border-radius:999px;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    font-size:12px;
+
+    margin-left:5px;
 }
 
-.container{padding:60px;}
+/* ==========================================================
+   THEME SWITCH
+   ========================================================== */
 
-.hero{
-display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;
+.theme-toggle{
+
+    width:58px;
+
+    height:30px;
+
+    border-radius:999px;
+
+    background:#E2E8F0;
+
+    position:relative;
+
+    cursor:pointer;
+
+    transition:.35s;
 }
 
-.hero h1{font-size:48px;}
-.hero span{color:#0066ff;}
+.toggle-circle{
 
-.hero img{
-width:100%;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,.4);
+    width:24px;
+
+    height:24px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    position:absolute;
+
+    top:3px;
+
+    left:3px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:.35s;
 }
+
+body.dark .theme-toggle{
+
+    background:#334155;
+}
+
+body.dark .toggle-circle{
+
+    left:31px;
+
+    background:#0F172A;
+
+    color:white;
+}
+
+/* ==========================================================
+   BUTTONS
+   ========================================================== */
 
 .btn{
-background:#0066ff;color:white;border:none;
-padding:12px 28px;border-radius:30px;
-cursor:pointer;font-weight:600;
-transition:.3s ease;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
 }
 
 .btn:hover{
-transform:translateY(-3px) scale(1.05);
-box-shadow:0 10px 25px rgba(0,0,0,.35);
+
+    transform:translateY(-4px);
+
+    box-shadow:0 25px 45px rgba(37,99,235,.35);
 }
+
+.btn.secondary{
+
+    background:white;
+
+    color:#0F172A;
+
+    border:1px solid var(--border);
+
+    box-shadow:none;
+}
+
+body.dark .btn.secondary{
+
+    background:#0F172A;
+
+    color:white;
+
+    border-color:#334155;
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+.hero{
+
+    display:grid;
+
+    grid-template-columns:1.05fr .95fr;
+
+    gap:80px;
+
+    align-items:center;
+
+    min-height:85vh;
+
+    padding:60px 0;
+}
+
+.hero-content h1{
+
+    font-size:clamp(3rem,6vw,5.3rem);
+
+    line-height:1.05;
+
+    font-weight:900;
+
+    letter-spacing:-2px;
+
+    margin:22px 0;
+}
+
+.hero-content h1 span{
+
+    color:var(--primary);
+}
+
+.hero-content p{
+
+    font-size:20px;
+
+    color:var(--text-light);
+
+    max-width:580px;
+
+    margin-bottom:35px;
+}
+
+.hero-actions{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:45px;
+}
+
+.hero-stats{
+
+    display:flex;
+
+    gap:50px;
+
+    flex-wrap:wrap;
+}
+
+.hero-stat h2{
+
+    font-size:34px;
+
+    color:var(--primary);
+}
+
+.hero-stat p{
+
+    font-size:15px;
+
+    color:var(--text-light);
+
+    margin:0;
+}
+
+.hero-image{
+
+    position:relative;
+}
+
+.hero-image img{
+
+    border-radius:30px;
+
+    box-shadow:var(--shadow-lg);
+
+    animation:floatImage 6s ease-in-out infinite;
+}
+
+@keyframes floatImage{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
+
 
 .categories,.cards{
 display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));

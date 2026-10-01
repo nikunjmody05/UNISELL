@@ -1,93 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', '23534bd5e71960570d00f93bd80937577bdd88df', { region: 'eu' });
-</script>
-   <script src="https://t.contentsquare.net/uxa/f41a18d4c13fe.js"></script>
-   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vd2e67rdbu");
-</script>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JVPS0RQZ8F');
-</script>
-<title>Unisell</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unisell: Shop electronics, fashion and accessories</title>
+<meta name="description" content="Unisell is an online store for electronics, fashion and accessories with fast checkout.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230071e3'/%3E%3Ctext x='50' y='70' font-size='62' font-weight='700' text-anchor='middle' fill='white' font-family='sans-serif'%3EU%3C/text%3E%3C/svg%3E">
+<script src="analytics.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<nav>
-  <div class="logo">Unisell</div>
-
-  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()" 
-         style="max-width:220px;">
-
-  <div style="display:flex;align-items:center;gap:12px;">
-
-    <div class="theme-toggle" onclick="toggleDark()">
-      <div class="toggle-circle">☀️</div>
-    </div>
-
-    <a href="index.html">Home</a>
-    <a href="products.html">Shop</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-
+<body data-page="home">
+<header class="hero">
+  <h1>Everything you need.<br>Delivered fast.</h1>
+  <p>Electronics, fashion and accessories from brands you trust, with checkout that takes under a minute.</p>
+  <div class="cta"><a class="btn" href="products.html">Shop now</a><a class="link" href="about.html">About Unisell</a></div>
+  <div class="stage" aria-hidden="true">
+    <div data-art="laptop" data-h="225"></div><div data-art="shoe" data-h="15"></div><div data-art="headphones" data-h="280"></div>
   </div>
-</nav>
-
-<div class="container hero">
-<div>
-<h1>One Market.<br><span>Unlimited Selling.</span></h1>
-<p>Top brands. Best deals. Smooth shopping experience.</p>
-<button class="btn" onclick="location.href='products.html'">Start Shopping</button>
-</div>
-
-<img src="images/laptop.jpg">
-</div>
-
-<div class="container">
-<h2>Shop by Category</h2>
-
-<div class="categories">
-
-<div class="cat" onclick="location.href='products.html#electronics'">
-<img src="images/cat-electronics.jpg">
-<h3>Electronics</h3>
-</div>
-
-<div class="cat" onclick="location.href='products.html#fashion'">
-<img src="images/cat-fashion.jpg">
-<h3>Fashion</h3>
-</div>
-
-<div class="cat" onclick="location.href='products.html#accessories'">
-<img src="images/headphones.jpg">
-<h3>Accessories</h3>
-</div>
-
-</div>
-</div>
-
-<script src="script.js"></script>
+</header>
+<main class="wrap">
+  <section>
+    <h2>Shop by category</h2>
+    <div class="cats" style="margin-top:28px">
+      <a class="cat" href="products.html#electronics"><div data-art="phone" data-h="215"></div><h3>Electronics</h3><p class="sub">Phones, laptops, wearables</p></a>
+      <a class="cat" href="products.html#fashion"><div data-art="jacket" data-h="25"></div><h3>Fashion</h3><p class="sub">Sneakers, jackets, everyday basics</p></a>
+      <a class="cat" href="products.html#accessories"><div data-art="camera" data-h="165"></div><h3>Accessories</h3><p class="sub">Audio, cameras, carry</p></a>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="row"><h2>Most loved</h2><a class="link" href="products.html">See all products</a></div>
+    <div class="grid" id="featured"></div>
+  </section>
+  <section class="perks">
+    <div><h3>Free delivery</h3><p>On orders over ₹5,000.</p></div>
+    <div><h3>7-day returns</h3><p>Changed your mind? Send it back.</p></div>
+    <div><h3>Secure payment</h3><p>UPI and cards, checked before you pay.</p></div>
+    <div><h3>Real support</h3><p>Talk to a person, any day.</p></div>
+  </section>
+</main>
+<script src="app.js"></script>
 </body>
 </html>
-
-
-

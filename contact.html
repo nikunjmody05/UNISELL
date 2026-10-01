@@ -1,88 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-     <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', '23534bd5e71960570d00f93bd80937577bdd88df', { region: 'eu' });
-</script>
-     <script src="https://t.contentsquare.net/uxa/f41a18d4c13fe.js"></script>
-     <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vd2e67rdbu");
-</script>
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JVPS0RQZ8F');
-</script>
-<title>Contact Us - Unisell</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact: Unisell</title>
+<meta name="description" content="Get in touch with Unisell support.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230071e3'/%3E%3Ctext x='50' y='70' font-size='62' font-weight='700' text-anchor='middle' fill='white' font-family='sans-serif'%3EU%3C/text%3E%3C/svg%3E">
+<script src="analytics.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<nav>
-  <div class="logo">Unisell</div>
-
-  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()" 
-         style="max-width:220px;">
-
-  <div style="display:flex;align-items:center;gap:12px;">
-
-    <div class="theme-toggle" onclick="toggleDark()">
-      <div class="toggle-circle">☀️</div>
-    </div>
-
-    <a href="index.html">Home</a>
-    <a href="products.html">Shop</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-
+<body data-page="contact">
+<main class="wrap">
+  <h1>Contact us</h1>
+  <div class="split">
+    <form onsubmit="sendMsg(this);return false" novalidate>
+      <label for="name">Name</label><input class="f" id="name" name="name" required autocomplete="name">
+      <label for="email">Email</label><input class="f" id="email" name="email" type="email" required autocomplete="email">
+      <label for="message">Message</label><textarea class="f" id="message" name="message" rows="5" required></textarea>
+      <p class="err" id="msg" role="alert"></p><button class="btn" type="submit">Send message</button>
+    </form>
+    <div><h3>Support</h3><p class="sub">support@unisell.com<br>+91 98765 43210<br>Every day, 9am to 9pm</p><h3 style="margin-top:26px">Office</h3><p class="sub">Unisell Pvt. Ltd.<br>Mumbai, Maharashtra, India</p></div>
   </div>
-</nav>
-
-<div class="container">
-<h1>Contact Us</h1>
-
-<p style="margin-top:15px;">
-Have questions or need help? Reach out to us anytime.
-</p>
-
-<h3 style="margin-top:20px;">Customer Support</h3>
-<p>Email: support@unisell.com</p>
-<p>Phone: +91 98765 43210</p>
-
-<h3 style="margin-top:20px;">Office Address</h3>
-<p>Unisell Pvt. Ltd.<br>
-Mumbai, Maharashtra, India</p>
-
-<h3 style="margin-top:25px;">Send Message</h3>
-
-<form style="max-width:400px;margin-top:10px;">
-<input placeholder="Your Name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;">
-<input placeholder="Email" style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;">
-<textarea placeholder="Message" style="width:100%;padding:10px;border-radius:8px;border:none;"></textarea>
-<br><br>
-<button class="btn" type="button">Submit</button>
-</form>
-
-</div>
-
-<script src="script.js"></script>
+</main>
+<script src="app.js"></script>
 </body>
-
 </html>
-
-
-

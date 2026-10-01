@@ -1,136 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-   <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', '23534bd5e71960570d00f93bd80937577bdd88df', { region: 'eu' });
-</script>
-   <script src="https://t.contentsquare.net/uxa/f41a18d4c13fe.js"></script>
-   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vd2e67rdbu");
-</script>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVPS0RQZ8F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JVPS0RQZ8F');
-</script>
-<title>Shop - Unisell</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop: Unisell</title>
+<meta name="description" content="Browse electronics, fashion and accessories. Search, filter and sort.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230071e3'/%3E%3Ctext x='50' y='70' font-size='62' font-weight='700' text-anchor='middle' fill='white' font-family='sans-serif'%3EU%3C/text%3E%3C/svg%3E">
+<script src="analytics.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<nav>
-  <div class="logo">Unisell</div>
-
-  <input id="searchBox" placeholder="Search products" onkeyup="searchProducts()" 
-         style="max-width:220px;">
-
-  <div style="display:flex;align-items:center;gap:12px;">
-
-    <div class="theme-toggle" onclick="toggleDark()">
-      <div class="toggle-circle">☀️</div>
-    </div>
-
-    <a href="index.html">Home</a>
-    <a href="products.html">Shop</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="cart.html">Cart <span id="count" class="cart-count">0</span></a>
-
+<body data-page="shop">
+<main class="wrap">
+  <div class="row"><h1>Shop</h1><span class="sub" id="n"></span></div>
+  <div class="bar" role="group" aria-label="Filters">
+    <button class="chip on" data-c="all" onclick="setCat('all')">All</button>
+    <button class="chip" data-c="electronics" onclick="setCat('electronics')">Electronics</button>
+    <button class="chip" data-c="fashion" onclick="setCat('fashion')">Fashion</button>
+    <button class="chip" data-c="accessories" onclick="setCat('accessories')">Accessories</button>
+    <button class="chip" id="sv" onclick="S.saved=!S.saved;shop()">♥ Saved</button>
+    <select aria-label="Sort products" onchange="S.sort=this.value;shop()">
+      <option value="f">Featured</option><option value="top">Top rated</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option>
+    </select>
   </div>
-</nav>
-
-<div class="container">
-
-<div class="section" id="electronics-section">
-<h2 id="electronics">Electronics</h2>
-<div class="cards">
-
-<div class="card product">
-<img src="images/phone.jpg">
-<div class="info">
-<h4>Smartphone</h4>
-<p class="rating">★★★★★</p>
-<p class="price">INR 25000</p>
-<button class="btn" onclick="addToCart('Smartphone',25000,this)">Add to Cart</button>
-</div></div>
-
-<div class="card product">
-<img src="images/laptop.jpg">
-<div class="info">
-<h4>Laptop</h4>
-<p class="rating">★★★★☆</p>
-<p class="price">INR 65000</p>
-<button class="btn" onclick="addToCart('Laptop',65000,this)">Add to Cart</button>
-</div></div>
-
-</div></div>
-
-<div class="section" id="fashion-section">
-<h2 id="fashion">Fashion</h2>
-<div class="cards">
-
-<div class="card product">
-<img src="images/shoes.jpg">
-<div class="info">
-<h4>Sneakers</h4>
-<p class="rating">★★★★★</p>
-<p class="price">INR 3999</p>
-<button class="btn" onclick="addToCart('Sneakers',3999,this)">Add to Cart</button>
-</div></div>
-
-<div class="card product">
-<img src="images/jacket.jpg">
-<div class="info">
-<h4>Jacket</h4>
-<p class="rating">★★★★☆</p>
-<p class="price">INR 2999</p>
-<button class="btn" onclick="addToCart('Jacket',2999,this)">Add to Cart</button>
-</div></div>
-
-</div></div>
-
-<div class="section" id="accessories-section">
-<h2 id="accessories">Accessories</h2>
-<div class="cards">
-
-<div class="card product">
-<img src="images/headphones.jpg">
-<div class="info">
-<h4>Headphones</h4>
-<p class="rating">★★★★★</p>
-<p class="price">INR 1999</p>
-<button class="btn" onclick="addToCart('Headphones',1999,this)">Add to Cart</button>
-</div></div>
-
-<div class="card product">
-<img src="images/camera.jpg">
-<div class="info">
-<h4>Camera</h4>
-<p class="rating">★★★★☆</p>
-<p class="price">INR 18000</p>
-<button class="btn" onclick="addToCart('Camera',18000,this)">Add to Cart</button>
-</div></div>
-
-</div></div>
-
-</div>
-
-<script src="script.js"></script>
+  <div class="grid" id="grid"></div>
+</main>
+<script src="app.js"></script>
 </body>
 </html>
-
-
-

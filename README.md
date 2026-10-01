@@ -1,109 +1,139 @@
-# Unisell
+# UNISELL 🛒
 
-A clean, Apple-inspired e-commerce storefront built with plain HTML, CSS and JavaScript. No framework and no build step. It includes a full shopping flow (browse, save, cart, checkout) and is instrumented with Google Analytics 4 and Microsoft Clarity to study real shopping behaviour.
+A modern, Apple-inspired e-commerce website built using HTML, CSS, and JavaScript featuring product browsing, search and filters, wishlist, cart management, checkout simulation, dark mode support, and analytics integration.
 
-**Live demo:** https://nikunjmody05.github.io/UNISELL/
+## 🌐 Live Demo
 
-![Unisell home page](screenshots/home.png)
+https://nikunjmody05.github.io/UNISELL/
 
-## Features
+---
 
-**Shopping**
-- 15 products across Electronics, Fashion and Accessories
-- Live search, category filters and sorting (featured, top rated, price low to high, price high to low)
-- Wishlist with a "Saved" filter
-- Cart with quantity controls, saved between visits
-- Free-delivery progress bar (free over ₹5,000, otherwise ₹99)
+## ✨ Features
 
-**Checkout (demo)**
-- UPI and debit/credit card payment options
-- Validation for UPI ID or mobile number, card number, expiry (MM/YY), CVV and cardholder name
-- Card number and expiry format automatically as you type
-- Order confirmation with a transaction ID
-- No real payment is taken
+* Product Catalog (15 products across Electronics, Fashion and Accessories)
+* Product Search
+* Category Filtering
+* Sorting (Featured, Top Rated, Price Low to High, Price High to Low)
+* Wishlist with Saved Items Filter
+* Shopping Cart with Quantity Controls using Local Storage
+* Free Delivery Progress Bar
+* Dark / Light Theme
+* Full Checkout Flow
+* UPI Payment Simulation
+* Debit / Credit Card Payment Simulation
+* Order Confirmation with Transaction ID
+* Contact Form with Validation
+* Responsive Design
+* Google Analytics 4 Integration
+* Microsoft Clarity Integration
 
-**Design and experience**
-- Light and dark mode that remembers your choice and loads without a flash
-- Product visuals drawn as inline SVG, so there are no image files to load
-- Responsive layout from phone to desktop
-- Visible keyboard focus, labelled controls and reduced-motion support
+---
 
-## Screenshots
+## 🛠 Tech Stack
 
-| Home | Shop |
-| --- | --- |
-| ![Home](screenshots/home.png) | ![Shop](screenshots/shop.png) |
+* HTML5
+* CSS3
+* JavaScript (ES6)
+* Google Analytics 4
+* Microsoft Clarity
+* Smartlook
+* Contentsquare
+* GitHub Pages
 
-| Cart | Dark mode |
-| --- | --- |
-| ![Cart](screenshots/cart.png) | ![Dark mode](screenshots/dark.png) |
+---
 
-## Analytics
-
-Events are sent to Google Analytics 4 with the `gtag` function.
-
-| Event | When it fires |
-| --- | --- |
-| `add_to_cart` | A product is added to the cart |
-| `add_to_wishlist` | A product is saved with the heart button |
-| `begin_checkout` | The shopper opens checkout |
-| `add_payment_info` | The shopper clicks Pay with valid details |
-| `purchase` | The simulated payment completes |
-| `generate_lead` | The contact form is submitted |
-
-Microsoft Clarity, Smartlook and Contentsquare are also loaded for heatmaps and session recordings. All tracking code lives in `analytics.js`, so it is the same on every page.
-
-## Tech stack
-
-- HTML5, CSS3 (custom properties for theming) and vanilla JavaScript (ES6)
-- `localStorage` for the cart, wishlist and theme
-- Google Analytics 4, Microsoft Clarity, Smartlook and Contentsquare
-- GitHub Pages for hosting
-
-## Project structure
+## 📁 Project Structure
 
 ```
 UNISELL/
-├── index.html       Home page
-├── products.html    Shop with search, filters and sorting
-├── cart.html        Cart, checkout and order confirmation
-├── about.html       About page
-├── contact.html     Contact form
-├── style.css        Design tokens, layout and dark theme
-├── app.js           Catalog, cart, wishlist, checkout and events
-├── analytics.js     Tracking scripts
-└── screenshots/     Images used in this README
+├── index.html
+├── products.html
+├── cart.html
+├── about.html
+├── contact.html
+├── style.css
+├── app.js
+├── analytics.js
+├── README.md
+└── screenshots/
 ```
 
-## How it works
+---
 
-- **Catalog:** All products are defined once in an array in `app.js`. The shop, home page and cart are all generated from it, so adding a product is a single line.
-- **Product art:** Each product has a hue and a glyph name. `app.js` draws the matching SVG on a tinted tile.
-- **State:** The cart is stored under the `cart` key, the wishlist under `wish` and the theme under `theme` in `localStorage`.
-- **Theme:** `analytics.js` sets the dark class before the page paints, which prevents a white flash.
+## 📊 Analytics Events
 
-## Run locally
+The project tracks user interactions using Google Analytics 4.
+
+| Event            | Description                       |
+| ---------------- | --------------------------------- |
+| add_to_cart      | User adds a product               |
+| add_to_wishlist  | User saves a product              |
+| begin_checkout   | Checkout process started          |
+| add_payment_info | Payment method selected and valid |
+| purchase         | Order successfully completed      |
+| generate_lead    | Contact form submitted            |
+
+---
+
+## 🔒 User Experience Features
+
+* Cart and wishlist persistence using Local Storage
+* Theme preference persistence with no flash on page load
+* Product visuals drawn as inline SVG, so no image files are needed
+* Secure checkout simulation (no real payment is taken)
+* Interactive order summary
+* Payment validation with auto-formatting for card number and expiry
+* Keyboard-friendly focus styles and reduced-motion support
+
+---
+
+## 🚀 Installation
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/nikunjmody05/UNISELL.git
-cd UNISELL
-npx serve
 ```
 
-You can also open `index.html` directly in a browser.
+Open:
 
-## Roadmap
+```bash
+index.html
+```
 
-- Product detail page
-- Coupon codes
-- Real product photography
-- Order history
+in your browser.
 
-## Author
+---
 
-**Nikunj Mody**
-GitHub: https://github.com/nikunjmody05
+## 📷 Screenshots
 
-## License
+### Homepage
 
-Developed for educational and portfolio purposes.
+![Homepage](screenshots/home.png)
+
+### Dark Mode
+
+![Dark Mode](screenshots/dark.png)
+
+### Products Page
+
+![Products Page](screenshots/shop.png)
+
+### Cart & Checkout Page
+
+![Cart Page](screenshots/cart.png)
+
+---
+
+## 👨‍💻 Author
+
+Nikunj Mody
+
+GitHub:
+https://github.com/nikunjmody05
+
+---
+
+## 📄 License
+
+This project was developed for educational and portfolio purposes.

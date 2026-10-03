@@ -1,6 +1,6 @@
-# UNISELL 2.0 🎓
+# UNISELL 🎓
 
-A student marketplace where university communities can buy, sell, rent, exchange and donate products. Built using HTML, CSS, and JavaScript featuring a 60-listing catalog, smart search, a step-by-step sell flow, seller profiles, wishlist, cart management, checkout simulation, orders, dark mode support, and analytics integration.
+A student marketplace where university communities can buy, sell, rent, exchange and donate products. Built using HTML, CSS, and JavaScript featuring a 60-listing catalog, smart search, a step-by-step sell flow, rental booking with double-booking prevention, pickup or delivery checkout, order tracking, compare, recommendations, dark mode support, and analytics integration.
 
 > **One Market. Unlimited Selling.**
 
@@ -12,24 +12,34 @@ https://nikunjmody05.github.io/UNISELL/
 
 ## ✨ Features
 
-* Marketplace Catalog (60 sample listings across 6 categories)
-* Buy, Rent, Exchange and Donate listing types
-* Explore Page with Filters (Category, Type, Campus, Condition, Max Price)
-* Sorting (Featured, Newest, Price Low to High, Price High to Low)
-* Smart Search that understands queries like "used calculator under ₹1500"
-* Product Pages that adapt to the listing type (rental price per day and deposit, exchange wishes, free donations)
-* Sell Flow: 5-step listing form that publishes into Explore
-* Seller Profiles and a Your Listings page with Unlist
-* Wishlist Page
-* Shopping Cart with Quantity Controls and Rental Items
-* Free Delivery Progress Bar
-* Full Checkout Flow with UPI and Card Payment Simulation
-* Order Confirmation with Transaction ID
-* Orders Page with Order History
-* Contact Form with Validation
-* Dark / Light Theme
-* Responsive Design
-* Google Analytics 4 and Microsoft Clarity Integration
+**Marketplace**
+* 60 sample listings across 6 categories (Electronics, Books, Stationery, Fashion, Hostel & Furniture, Accessories)
+* Buy, Rent, Exchange and Donate listing types, with product pages that adapt to the type
+* Explore page with filters (Category, Type, Campus, Condition, Max Price) and sorting
+* Smart Search that understands queries like "used calculator under ₹1500" (rule-based, not AI)
+* Compare up to 3 listings side by side
+* Similar listings, Recently viewed and Recommended for you (rule-based, from your activity)
+
+**Selling**
+* 5-step Sell flow that publishes into Explore
+* Edit and unlist your own listings
+* Seller profiles and a Your Listings page
+
+**Buying**
+* Wishlist page and shopping cart with quantity controls
+* Rental booking with date picker and double-booking prevention
+* Checkout with campus pickup (free) or home delivery, plus UPI and card payment simulation
+* Order confirmation with Transaction ID
+* Orders page with a status tracker (Confirmed, Preparing, Ready or Out for delivery, Completed)
+
+**Experience**
+* Dark / Light theme with no flash on load
+* Responsive design with a mobile menu
+* Scroll animations with reduced-motion support
+* Accessibility: skip link, labelled landmarks, keyboard focus, screen-reader state for buttons
+* SEO: page descriptions, canonical links, link previews, sitemap, custom 404 page
+* How it works, Trust and Safety, and Help/FAQ pages
+* Google Analytics 4 and Microsoft Clarity integration
 
 ---
 
@@ -38,7 +48,7 @@ https://nikunjmody05.github.io/UNISELL/
 * HTML5
 * CSS3
 * JavaScript (ES6)
-* Local Storage (data layer)
+* Local Storage behind a small data layer (`data.js`)
 * Google Analytics 4
 * Microsoft Clarity
 * Smartlook
@@ -51,19 +61,27 @@ https://nikunjmody05.github.io/UNISELL/
 
 ```
 UNISELL/
-├── index.html
-├── products.html     (Explore)
-├── product.html      (Listing page)
-├── sell.html         (Sell flow)
-├── seller.html       (Seller profile / Your listings)
-├── wishlist.html
-├── cart.html         (Cart and checkout)
-├── orders.html
+├── index.html          Home
+├── products.html       Explore
+├── product.html        Listing page
+├── compare.html        Compare listings
+├── sell.html           Sell and edit flow
+├── seller.html         Seller profile / Your listings
+├── wishlist.html       Saved items
+├── cart.html           Cart and checkout
+├── orders.html         Orders and tracker
+├── how-it-works.html   How it works
+├── safety.html         Trust and safety
+├── help.html           Help and FAQ
 ├── about.html
 ├── contact.html
+├── 404.html
 ├── style.css
-├── app.js
-├── analytics.js
+├── app.js              Catalog, search, cart, checkout and events
+├── data.js             Data layer (the only file that touches storage)
+├── analytics.js        Tracking scripts
+├── og.png              Link preview image
+├── sitemap.xml
 ├── README.md
 └── screenshots/
 ```
@@ -96,10 +114,11 @@ The project tracks user interactions using Google Analytics 4.
 UNISELL 2.0 is a front-end application. It is honest about its limits:
 
 * Listings, sellers and campuses in the catalog are **sample data**
-* Your own listings, cart, wishlist, orders and theme are saved in **Local Storage** on your device only
+* Your own listings, cart, wishlist, orders, bookings and theme are saved in **Local Storage** on your device only
 * Payments are **simulated**. No money is processed, so do not enter real card details
+* Order status advances automatically over a few minutes to demonstrate the flow
 * Exchange and donation requests show a confirmation but are not delivered to anyone yet
-* There are no accounts, reviews or university verification yet
+* There are no accounts, reviews, chat or university verification yet
 
 ---
 
@@ -107,10 +126,9 @@ UNISELL 2.0 is a front-end application. It is honest about its limits:
 
 * Accounts and university email verification
 * Real database and image storage
-* Buyer and seller chat
+* Buyer and seller chat with notifications
 * Real payments with a server-side integration
-* Reviews tied to completed transactions
-* Admin moderation
+* Reviews tied to completed transactions, reports and admin moderation
 * AI-powered search and recommendations
 
 ---
@@ -143,13 +161,29 @@ in your browser.
 
 ![Dark Mode](screenshots/dark.png)
 
-### Explore Page
+### Explore
 
 ![Explore](screenshots/shop.png)
 
-### Cart & Checkout Page
+### Rental Listing with Date Picker
+
+![Rental listing](screenshots/rental.png)
+
+### Sell Flow
+
+![Sell flow](screenshots/sell.png)
+
+### Cart & Checkout
 
 ![Cart Page](screenshots/cart.png)
+
+### Orders Tracker
+
+![Orders](screenshots/orders.png)
+
+### Mobile Menu
+
+![Mobile menu](screenshots/mobile.png)
 
 ---
 

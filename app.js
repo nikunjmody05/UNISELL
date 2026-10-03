@@ -66,28 +66,34 @@ Water Bottle 1L|a|300|0|b|bank
 Cycle Lock|a|250|0|b|bank
 Tote Bag|a|250|1|b|bag`.split('\n').map((r,id)=>{const[name,cat,price,c,type,g,wants]=r.split('|');return{id,name,cat,price:+price,cond:+c,type,g,wants,seller:SEL[id*3%8],campus:CAMP[id*7%CAMP.length],h:(HUE[cat]+id*13)%360,desc:`${COND[+c]} condition, listed by ${SEL[id*3%8]} at ${CAMP[id*7%CAMP.length]}. ${TAIL[type]}`}});
 const art=(g,h)=>`<div class="art" style="--h:${h}"><svg viewBox="0 0 100 100" aria-hidden="true">${G[g]}</svg></div>`;
-const get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
-let cart=get('cart',[]).reduce((a,i)=>{const f=a.find(x=>x.name===i.name);f?f.qty+=i.qty||1:a.push({id:i.id,name:i.name,price:i.price,qty:i.qty||1});return a},[]);
-let W=new Set(get('wish',[]));
-const BASE=P.length,LS=get('listings',[]),O=get('orders',[]),V=()=>P.filter(p=>!p.rm);
+let cart=DB.cart.get().reduce((a,i)=>{const f=a.find(x=>x.name===i.name);f?f.qty+=i.qty||1:a.push({id:i.id,name:i.name,price:i.price,qty:i.qty||1});return a},[]);
+let W=new Set(DB.wish.get());
+const BASE=P.length,LS=DB.listings.get(),O=DB.orders.get(),V=()=>P.filter(p=>!p.rm);
 LS.forEach(l=>P.push({...l,id:P.length}));
 const sub=()=>cart.reduce((s,i)=>s+i.price*i.qty,0),items=()=>cart.map(i=>({item_name:i.name,price:i.price,quantity:i.qty}));
-function save(){localStorage.setItem('cart',JSON.stringify(cart));const c=$('#count');if(c)c.textContent=cart.reduce((s,i)=>s+i.qty,0)}
+function save(){DB.cart.set(cart);const n=cart.reduce((s,i)=>s+i.qty,0),c=$('#count');if(c){c.textContent=n;$('#cartlink').setAttribute('aria-label','Cart, '+n+' items')}}
 
 /* shell: nav + footer */
 const L=[['shop','Explore','products.html'],['sell','Sell','sell.html'],['wishlist','Saved','wishlist.html'],['orders','Orders','orders.html'],['about','About','about.html'],['contact','Contact','contact.html']];
-document.body.insertAdjacentHTML('afterbegin',`<nav><a class="logo" href="index.html">Unisell</a><input class="search" type="search" placeholder="Search" aria-label="Search products" oninput="qs(this.value)" onkeydown="if(event.key=='Enter')location.href='products.html?q='+encodeURIComponent(this.value)">${L.map(l=>`<a class="l-${l[0]}${page==l[0]?' on':''}" href="${l[2]}">${l[1]}</a>`).join('')}<a class="${page=='cart'?'on':''}" href="cart.html">Cart<span id="count" class="cart-count">0</span></a><button class="icon" onclick="toggleDark()" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></nav>`);
-document.body.insertAdjacentHTML('beforeend',`<footer><span>© 2026 Unisell. Built by <a href="https://github.com/nikunjmody05">Nikunj Mody</a>.</span><nav>${L.map(l=>`<a href="${l[2]}">${l[1]}</a>`).join('')}</nav></footer><div class="toast" id="toast" role="status"></div>`);
+const SRCH=`<input class="search" type="search" placeholder="Search" aria-label="Search listings" oninput="qs(this.value)" onkeydown="if(event.key=='Enter')location.href='products.html?q='+encodeURIComponent(this.value)">`;
+document.body.insertAdjacentHTML('afterbegin',`<a class="skip" href="#main">Skip to content</a><nav aria-label="Main"><a class="logo" href="index.html">Unisell</a>${SRCH}<div class="links" id="links">${SRCH.replace('class="search"','class="search msearch"')}${L.map(l=>`<a class="l-${l[0]}${page==l[0]?' on':''}" href="${l[2]}"${page==l[0]?' aria-current="page"':''}>${l[1]}</a>`).join('')}</div><a id="cartlink" class="${page=='cart'?'on':''}" href="cart.html" aria-label="Cart">Cart<span id="count" class="cart-count">0</span></a><button class="icon" onclick="toggleDark()" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button class="icon burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="links" onclick="menu()"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg></button></nav>`);
+document.body.insertAdjacentHTML('beforeend',`<footer><span>© 2026 Unisell. Built by <a href="https://github.com/nikunjmody05">Nikunj Mody</a>.</span><nav aria-label="Footer">${L.map(l=>`<a href="${l[2]}">${l[1]}</a>`).join('')}</nav></footer><div class="toast" id="toast" role="status"></div>`);
+function menu(o){const n=$('nav'),b=$('#burger');o=o===undefined?!n.classList.contains('open'):o;n.classList.toggle('open',o);b.setAttribute('aria-expanded',o)}
+addEventListener('keydown',e=>{if(e.key=='Escape'&&$('nav').classList.contains('open')){menu(false);$('#burger').focus()}});
+document.addEventListener('click',e=>{if(!e.target.closest('nav'))menu(false)});
+addEventListener('error',()=>toast('Something went wrong. Please refresh and try again.'));
+const mn=document.querySelector('main');if(mn){mn.id=mn.id||'main';mn.tabIndex=-1;$('.skip').href='#'+mn.id}
+function foc(){const h=$('#view h1,#view h2');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),1800)}
-function toggleDark(){const d=document.documentElement.classList.toggle('dark');localStorage.setItem('theme',d?'dark':'light')}
+function toggleDark(){const d=document.documentElement.classList.toggle('dark');DB.theme.set(d?'dark':'light')}
 
 /* cards, cart, wishlist */
 const pr=p=>p.type=='d'?'Free':p.type=='x'?'Exchange':inr(p.price)+(p.type=='r'?'/day':'');
-const card=p=>`<article class="card"><div class="ph"><a href="product.html?id=${p.id}" aria-label="${p.name}">${art(p.g,p.h)}</a><span class="badge">${TY[p.type]}</span><button class="heart${W.has(p.id)?' on':''}" aria-label="Save ${p.name}" onclick="wish(${p.id},this)">♥</button></div><h3><a href="product.html?id=${p.id}">${p.name}</a></h3><p class="sub">${COND[p.cond]} – ${p.campus}</p><div class="row"><b>${pr(p)}</b>${p.type=='b'?`<button class="btn sm" onclick="addToCart(${p.id},this)">Add to cart</button>`:`<a class="btn sm ghost" href="product.html?id=${p.id}">View</a>`}</div></article>`;
+const card=p=>`<article class="card"><div class="ph"><a href="product.html?id=${p.id}" aria-label="${p.name}">${art(p.g,p.h)}</a><span class="badge">${TY[p.type]}</span><button class="heart${W.has(p.id)?' on':''}" aria-pressed="${W.has(p.id)}" aria-label="Save ${p.name}" onclick="wish(${p.id},this)">♥</button></div><h3><a href="product.html?id=${p.id}">${p.name}</a></h3><p class="sub">${COND[p.cond]} – ${p.campus}</p><div class="row"><b>${pr(p)}</b>${p.type=='b'?`<button class="btn sm" onclick="addToCart(${p.id},this)">Add to cart</button>`:`<a class="btn sm ghost" href="product.html?id=${p.id}">View</a>`}</div></article>`;
 function addToCart(id,btn){const p=P[id],f=cart.find(i=>i.name==p.name);f?f.qty++:cart.push({id,name:p.name,price:p.price,qty:1});save();
  gtag('event','add_to_cart',{currency:'INR',value:p.price,items:[{item_name:p.name,item_category:CATS[p.cat],price:p.price,quantity:1}]});
  btn.textContent='Added ✓';setTimeout(()=>btn.textContent='Add to cart',1200);toast(p.name+' added to your cart')}
-function wish(id,b){const on=!W.has(id);on?W.add(id):W.delete(id);localStorage.setItem('wish',JSON.stringify([...W]));b.classList.toggle('on',on);if(on)gtag('event','add_to_wishlist',{currency:'INR',value:P[id].price,items:[{item_name:P[id].name}]});if(S.saved)shop();if(page=='wishlist')wl()}
+function wish(id,b){const on=!W.has(id);on?W.add(id):W.delete(id);DB.wish.set([...W]);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);if(on)gtag('event','add_to_wishlist',{currency:'INR',value:P[id].price,items:[{item_name:P[id].name}]});if(S.saved)shop();if(page=='wishlist')wl()}
 
 /* explore + smart search */
 const S={cat:'all',type:'all',campus:'all',cond:'all',max:0,sort:'f',q:'',saved:false};
@@ -101,13 +107,13 @@ function bars(){const ch=(k,v,l,x)=>`<button class="chip" data-k="${k}" data-v="
  $('#b2').innerHTML=Object.entries(TY).map(([k,v])=>ch('type',k,v,`setF('type',S.type=='${k}'?'all':'${k}')`)).join('')+`<button class="chip" id="sv" onclick="S.saved=!S.saved;shop()">♥ Saved</button>`
  +sel('Campus','campus','<option value="all">All campuses</option>'+CAMP.map(c=>`<option>${c}</option>`).join(''))+sel('Condition','cond','<option value="all">Any condition</option>'+COND.map((c,i)=>`<option value="${i}">${c}</option>`).join(''))+sel('Maximum price','max',[0,500,1000,5000,20000].map(n=>`<option value="${n}">${n?'Under '+inr(n):'Any price'}</option>`).join(''))
  +`<select aria-label="Sort" onchange="S.sort=this.value;shop()"><option value="f">Featured</option><option value="new">Newest</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option></select>`}
-function shop(){const g=$('#grid');if(!g)return;const o=parse(S.q),m=o.max||S.max;
+function shop(){const g=$('#grid');if(!g)return;g.removeAttribute('aria-busy');const o=parse(S.q),m=o.max||S.max;
  let l=V().filter(p=>{const h=(p.name+' '+CATS[p.cat]+' '+TY[p.type]+' '+p.campus).toLowerCase();return(S.cat=='all'||p.cat==S.cat)&&(S.type=='all'||p.type==S.type)&&(S.campus=='all'||p.campus==S.campus)&&(S.cond=='all'||p.cond==S.cond)&&(!S.saved||W.has(p.id))&&(!m||p.price<=m)&&(!o.type||p.type==o.type)&&(!o.cat||p.cat==o.cat)&&(!o.campus||p.campus==o.campus)&&(o.cond==null||p.cond==o.cond)&&(!o.used||p.cond>0)&&o.w.every(w=>h.includes(w))});
  if(S.sort=='lo')l.sort((a,b)=>a.price-b.price);if(S.sort=='hi')l.sort((a,b)=>b.price-a.price);if(S.sort=='new')l.sort((a,b)=>b.id-a.id);
  g.innerHTML=l.map(card).join('')||`<p class="empty">${S.saved?'You haven’t saved anything yet. Tap the heart on a listing to save it.':'No listings match. Try fewer words or clear the filters.'}</p>`;
  $('#n').textContent=l.length+' listings';
  $('#hint').textContent=S.q?'Understood: '+[o.w.join(' '),CATS[o.cat],TY[o.type],o.cond!=null?COND[o.cond]:o.used?'used':'',o.max?'under '+inr(o.max):'',o.campus].filter(Boolean).join(', '):'';
- document.querySelectorAll('.chip[data-k]').forEach(c=>c.classList.toggle('on',!S.saved&&S[c.dataset.k]==c.dataset.v));$('#sv').classList.toggle('on',S.saved)}
+ document.querySelectorAll('.chip[data-k]').forEach(c=>{const on=!S.saved&&S[c.dataset.k]==c.dataset.v;c.classList.toggle('on',on);c.setAttribute('aria-pressed',on)});$('#sv').classList.toggle('on',S.saved);$('#sv').setAttribute('aria-pressed',S.saved)}
 
 /* product page */
 function rent(id){const p=P[id],d=+$('#days').value;cart.push({id,name:`${p.name} (${d}-day rental)`,price:p.price*d,qty:1});save();
@@ -135,7 +141,7 @@ function checkout(){const t=sub()+ship();
  <div id="cardBox" hidden><label for="cardNumber">Card number</label><input class="f" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" oninput="this.value=this.value.replace(/\\D/g,'').replace(/(.{4})/g,'$1 ').trim()"><div class="two"><div><label for="cardExpiry">Expiry</label><input class="f" id="cardExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/\\D/g,'').replace(/^(\\d{2})(\\d)/,'$1/$2')"></div><div><label for="cardCVV">CVV</label><input class="f" id="cardCVV" type="password" maxlength="3" inputmode="numeric" placeholder="•••"></div></div><label for="cardName">Name on card</label><input class="f" id="cardName" autocomplete="cc-name"></div>
  <p class="err" id="payError" role="alert"></p><button class="btn" style="width:100%" id="payBtn" onclick="payNow()">Pay ${inr(t)}</button><div class="spin" id="payLoader"></div><p class="sub" style="margin-top:14px">This is a demo. No real payment is taken, so don’t enter real card details.</p></div>
  <aside class="sum"><h3>Order summary</h3>${cart.map(i=>`<p><span>${i.name} × ${i.qty}</span><span>${inr(i.price*i.qty)}</span></p>`).join('')}<p><span>Delivery</span><span>${ship()?inr(ship()):'Free'}</span></p><p class="tot"><span>Total</span><span>${inr(t)}</span></p></aside></div>`;
- method='upi';gtag('event','begin_checkout',{currency:'INR',value:sub(),items:items()})}
+ method='upi';foc();gtag('event','begin_checkout',{currency:'INR',value:sub(),items:items()})}
 function pm(m){method=m;$('#upiBox').hidden=m!='upi';$('#cardBox').hidden=m!='card';$('#m-upi').classList.toggle('on',m=='upi');$('#m-card').classList.toggle('on',m=='card');$('#payError').textContent=''}
 function payNow(){const e=$('#payError');e.textContent='';
  if(method=='upi'){const u=$('#upiInput').value.trim();if(!/^[\w.-]+@[\w.-]+$/.test(u)&&!/^[6-9]\d{9}$/.test(u))return e.textContent='Enter a valid UPI ID (name@bank) or a 10-digit mobile number.'}
@@ -147,9 +153,9 @@ function payNow(){const e=$('#payError');e.textContent='';
  gtag('event','add_payment_info',{currency:'INR',value:sub(),payment_type:method,items:items()});
  setTimeout(()=>{const id='TXN_'+Date.now(),t=sub()+ship();
   gtag('event','purchase',{transaction_id:id,currency:'INR',value:t,shipping:ship(),items:items()});
-  O.unshift({id,date:Date.now(),items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),total:t,method,status:'Confirmed'});localStorage.setItem('orders',JSON.stringify(O));
+  O.unshift({id,date:Date.now(),items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),total:t,method,status:'Confirmed'});DB.orders.set(O);
   cart=[];save();
-  $('#view').innerHTML=`<div class="done"><span class="tick">✓</span><h1>Order confirmed</h1><p class="mute">Order ${id} for ${inr(t)} is on its way. A receipt would be sent to your email.</p><a class="btn" href="products.html">Continue shopping</a></div>`},2500)}
+  $('#view').innerHTML=`<div class="done"><span class="tick">✓</span><h1>Order confirmed</h1><p class="mute">Order ${id} for ${inr(t)} is on its way. A receipt would be sent to your email.</p><a class="btn" href="products.html">Continue shopping</a></div>`;foc()},2500)}
 
 /* contact */
 function sendMsg(f){const ok=[...f.elements].filter(x=>x.required).every(x=>x.value.trim());
@@ -157,25 +163,24 @@ function sendMsg(f){const ok=[...f.elements].filter(x=>x.required).every(x=>x.va
  gtag('event','generate_lead',{method:'contact_form'});f.outerHTML='<p class="prose" style="color:var(--blue);font-size:19px">Thanks. We’ve received your message and will reply within one working day.</p>'}
 
 /* sell flow */
-const LF={s:0,type:'b',name:'',cat:'e',desc:'',cond:2,price:'',wants:'',campus:CAMP[0]},ST=['Type','Details','Condition and price','Campus','Preview'],SELLT={b:'Sell',r:'Rent out',x:'Exchange',d:'Donate'};
+const LF={s:0,type:'b',name:'',cat:'e',desc:'',cond:2,price:'',wants:'',campus:CAMP[0],edit:null},ST=['Type','Details','Condition and price','Campus','Preview'],SELLT={b:'Sell',r:'Rent out',x:'Exchange',d:'Donate'};
 function sell(msg){const v=$('#view'),s=LF.s,o=(arr,cur)=>arr.map(([k,t])=>`<option value="${k}"${cur==k?' selected':''}>${t}</option>`).join('');let b='';
  if(s==0)b=`<div class="seg" style="margin-top:18px">${Object.entries(SELLT).map(([k,t])=>`<button class="chip${LF.type==k?' on':''}" onclick="LF.type='${k}';sell()">${t}</button>`).join('')}</div>`;
  if(s==1)b=`<label for="f-name">Item name</label><input class="f" id="f-name" value="${LF.name}" placeholder="e.g. Casio fx-991EX Calculator"><label for="f-cat">Category</label><select class="f" id="f-cat" style="margin:0">${o(Object.entries(CATS),LF.cat)}</select><label for="f-desc">Description (optional)</label><textarea class="f" id="f-desc" rows="3">${LF.desc}</textarea>`;
  if(s==2)b=`<label for="f-cond">Condition</label><select class="f" id="f-cond" style="margin:0">${o(COND.map((c,i)=>[i,c]),LF.cond)}</select>${LF.type=='d'?'':`<label for="f-price">${LF.type=='r'?'Price per day (₹)':LF.type=='x'?'Estimated value (₹)':'Price (₹)'}</label><input class="f" id="f-price" type="number" min="1" value="${LF.price}">`}${LF.type=='x'?`<label for="f-wants">What do you want in exchange?</label><input class="f" id="f-wants" value="${LF.wants}">`:''}`;
  if(s==3)b=`<label for="f-camp">Pickup campus</label><select class="f" id="f-camp" style="margin:0">${o(CAMP.map(c=>[c,c]),LF.campus)}</select>`;
  if(s==4)b=`<div class="pdp" style="margin-top:22px">${art(sg(),HUE[LF.cat])}<div><span class="badge">${TY[LF.type]}</span><h2 style="margin:10px 0">${LF.name}</h2><p class="price">${LF.type=='d'?'Free':LF.type=='x'?'Exchange':inr(+LF.price)+(LF.type=='r'?'/day':'')}</p><div class="facts"><p><span>Category</span>${CATS[LF.cat]}</p><p><span>Condition</span>${COND[LF.cond]}</p><p><span>Campus</span>${LF.campus}</p>${LF.wants?`<p><span>Looking for</span>${LF.wants}</p>`:''}</div></div></div>`;
- v.innerHTML=`<h1>Create a listing</h1><p class="sub">Saved on this device only until accounts launch.</p><div class="ship" style="margin:22px 0 6px"><i style="width:${(s+1)*20}%"></i></div><p class="sub">Step ${s+1} of 5: ${ST[s]}</p><div style="max-width:560px">${b}<p class="err" id="err" role="alert">${msg||''}</p><div class="act">${s?`<button class="btn ghost" onclick="LF.s--;sell()">Back</button>`:''}<button class="btn" onclick="${s==4?'publish()':'nx()'}">${s==4?'Publish listing':'Continue'}</button></div></div>`}
+ v.innerHTML=`<h1>${LF.edit!=null?'Edit listing':'Create a listing'}</h1><p class="sub">Saved on this device only until accounts launch.</p><div class="ship" style="margin:22px 0 6px"><i style="width:${(s+1)*20}%"></i></div><p class="sub">Step ${s+1} of 5: ${ST[s]}</p><div style="max-width:560px">${b}<p class="err" id="err" role="alert">${msg||''}</p><div class="act">${s?`<button class="btn ghost" onclick="LF.s--;sell();foc()">Back</button>`:''}<button class="btn" onclick="${s==4?'publish()':'nx()'}">${s==4?(LF.edit!=null?'Save changes':'Publish listing'):'Continue'}</button></div></div>`}
 const sg=()=>({e:'laptop',b:'book',s:'pen',f:'tee',h:'lamp',a:'bag'})[LF.cat];
 function nx(){const s=LF.s,i=id=>$('#'+id)&&$('#'+id).value.trim();
  if(s==1){LF.name=i('f-name');LF.cat=i('f-cat');LF.desc=i('f-desc');if(LF.name.length<3)return sell('Enter an item name of at least 3 characters.')}
  if(s==2){LF.cond=+i('f-cond');if(LF.type!='d'){LF.price=i('f-price');if(!(+LF.price>0))return sell('Enter a price greater than 0.')}if(LF.type=='x'){LF.wants=i('f-wants');if(LF.wants.length<3)return sell('Say what you would like in exchange.')}}
  if(s==3)LF.campus=i('f-camp');
- LF.s++;sell()}
-function publish(){const l={name:LF.name,cat:LF.cat,price:LF.type=='d'?0:+LF.price,cond:LF.cond,type:LF.type,g:sg(),wants:LF.type=='x'?LF.wants:'',seller:'You',campus:LF.campus,h:(HUE[LF.cat]+LS.length*37)%360,desc:LF.desc||`${COND[LF.cond]} condition, listed by you at ${LF.campus}. ${TAIL[LF.type]}`,mine:1,rm:0};
- LS.push(l);localStorage.setItem('listings',JSON.stringify(LS));const id=P.length;P.push({...l,id});
- gtag('event','create_listing',{item_name:l.name,item_category:CATS[l.cat],listing_type:l.type});
- Object.assign(LF,{s:0,name:'',desc:'',price:'',wants:''});
- $('#view').innerHTML=`<div class="done"><span class="tick">✓</span><h1>Listing published</h1><p class="mute">It now appears in Explore. It’s saved on this device only.</p><div class="act" style="justify-content:center"><a class="btn" href="product.html?id=${id}">View listing</a><a class="btn ghost" href="seller.html?s=You">Manage your listings</a><button class="btn ghost" onclick="sell()">List another</button></div></div>`}
+ LF.s++;sell();foc()}
+function publish(){const e=LF.edit!=null,f={name:LF.name,cat:LF.cat,price:LF.type=='d'?0:+LF.price,cond:LF.cond,type:LF.type,g:sg(),wants:LF.type=='x'?LF.wants:'',campus:LF.campus,desc:LF.desc||`${COND[LF.cond]} condition, listed by you at ${LF.campus}. ${TAIL[LF.type]}`};let id;
+ if(e){id=LF.edit;Object.assign(LS[id-BASE],f);Object.assign(P[id],f)}else{const l={...f,seller:'You',h:(HUE[LF.cat]+LS.length*37)%360,mine:1,rm:0};LS.push(l);id=P.length;P.push({...l,id});gtag('event','create_listing',{item_name:l.name,item_category:CATS[l.cat],listing_type:l.type})}
+ DB.listings.set(LS);Object.assign(LF,{s:0,name:'',desc:'',price:'',wants:'',edit:null});
+ $('#view').innerHTML=`<div class="done"><span class="tick">✓</span><h1>${e?'Listing updated':'Listing published'}</h1><p class="mute">${e?'Your changes are saved.':'It now appears in Explore.'} Stored on this device only.</p><div class="act" style="justify-content:center"><a class="btn" href="product.html?id=${id}">View listing</a><a class="btn ghost" href="seller.html?s=You">Manage your listings</a><a class="btn ghost" href="sell.html">List another</a></div></div>`;foc()}
 
 /* seller profile + dashboard */
 function sellerPg(){const n=new URLSearchParams(location.search).get('s')||'',me=n=='You',l=V().filter(p=>p.seller==n),v=$('#view');
@@ -184,8 +189,8 @@ function sellerPg(){const n=new URLSearchParams(location.search).get('s')||'',me
  v.innerHTML=`<div class="row" style="justify-content:flex-start;gap:20px"><div class="av">${n[0]}</div><div><span class="badge">${me?'Your account':'Sample seller'}</span><h1 style="margin-top:6px">${me?'Your listings':n}</h1></div></div>
  <div class="facts" style="max-width:520px"><p><span>Campus</span>${l[0]?l[0].campus:'Not set'}</p><p><span>Active listings</span>${l.length}</p><p><span>Offers</span>${t||'None yet'}</p></div>
  <p class="sub">${me?'Stored on this device only.':'Profiles, verification and reviews arrive with accounts. This seller is sample data.'}</p>
- ${l.length?`<div class="grid" style="margin-top:36px">${l.map(p=>`<div>${card(p)}${me?`<button class="link" style="margin-top:10px" onclick="unlist(${p.id})">Unlist</button>`:''}</div>`).join('')}</div>`:`<p class="empty">You haven’t listed anything yet. <a href="sell.html">Create your first listing</a>.</p>`}`}
-function unlist(id){P[id].rm=1;LS[id-BASE].rm=1;localStorage.setItem('listings',JSON.stringify(LS));sellerPg();toast('Listing removed')}
+ ${l.length?`<div class="grid" style="margin-top:36px">${l.map(p=>`<div>${card(p)}${me?`<p class="act" style="gap:18px;margin-top:10px"><a class="link" href="sell.html?edit=${p.id}">Edit</a><button class="link" onclick="unlist(${p.id})">Unlist</button></p>`:''}</div>`).join('')}</div>`:`<p class="empty">You haven’t listed anything yet. <a href="sell.html">Create your first listing</a>.</p>`}`}
+function unlist(id){P[id].rm=1;LS[id-BASE].rm=1;DB.listings.set(LS);sellerPg();toast('Listing removed')}
 
 /* saved + orders */
 function wl(){const l=V().filter(p=>W.has(p.id));$('#view').innerHTML=`<div class="row"><h1>Saved</h1><span class="sub">${l.length} saved</span></div>`+(l.length?`<div class="grid" style="margin-top:36px">${l.map(card).join('')}</div>`:`<p class="empty">Nothing saved yet. Tap the heart on any listing to keep it here. <a href="products.html">Explore listings</a>.</p>`)}
@@ -195,7 +200,7 @@ function ord(){$('#view').innerHTML=`<h1>Your orders</h1><p class="sub">Demo ord
 document.querySelectorAll('[data-art]').forEach(e=>{e.classList.add('art');e.style.setProperty('--h',e.dataset.h);e.innerHTML=`<svg viewBox="0 0 100 100" aria-hidden="true">${G[e.dataset.art]}</svg>`;e.querySelectorAll('svg *').forEach(s=>s.setAttribute('pathLength',1))});
 const feat=$('#featured');if(feat)feat.innerHTML=V().filter(p=>p.id%15==1).slice(0,4).map(card).join('');
 if(page=='shop'){const u=new URLSearchParams(location.search),h=location.hash.slice(1);S.q=(u.get('q')||'').toLowerCase();if(CATS[h])S.cat=h;document.querySelector('.search').value=u.get('q')||'';bars();shop()}
-if(page=='product')pdp();if(page=='sell')sell();if(page=='seller')sellerPg();if(page=='wishlist')wl();if(page=='orders')ord();
+if(page=='product')pdp();if(page=='sell'){const ed=new URLSearchParams(location.search).get('edit'),q=P[ed];if(q&&q.mine&&!q.rm)Object.assign(LF,{s:1,type:q.type,name:q.name,cat:q.cat,desc:q.desc,cond:q.cond,price:q.price||'',wants:q.wants||'',campus:q.campus,edit:+ed});sell()}if(page=='seller')sellerPg();if(page=='wishlist')wl();if(page=='orders')ord();
 if(page=='cart')cartView();
 /* scroll motion */
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,bar=document.createElement('div');bar.id='prog';document.body.prepend(bar);

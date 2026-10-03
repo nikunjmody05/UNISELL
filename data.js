@@ -1,0 +1,3 @@
+/* Data layer: the only file that reads or writes storage. In Stage 2, swap this for Supabase calls. */
+const DB=(()=>{const rd=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},wr=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},col=k=>({get:()=>rd(k,[]),set:v=>wr(k,v)});
+ return{cart:col('cart'),wish:col('wish'),listings:col('listings'),orders:col('orders'),theme:{get:()=>{try{return localStorage.getItem('theme')}catch(e){return null}},set:v=>{try{localStorage.setItem('theme',v)}catch(e){}}}}})();

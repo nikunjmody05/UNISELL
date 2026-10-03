@@ -165,10 +165,6 @@ in your browser.
 
 ![Explore](screenshots/shop.png)
 
-### Rental Listing with Date Picker
-
-![Rental listing](screenshots/rental.png)
-
 ### Sell Flow
 
 ![Sell flow](screenshots/sell.png)
@@ -180,10 +176,6 @@ in your browser.
 ### Orders Tracker
 
 ![Orders](screenshots/orders.png)
-
-### Mobile Menu
-
-![Mobile menu](screenshots/mobile.png)
 
 ---
 
